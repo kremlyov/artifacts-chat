@@ -85,6 +85,15 @@ a:focus-visible { outline: 2px solid #7a55ff; outline-offset: 2px; }
 }
 .menu-row[aria-current="page"] { background: var(--hover); }
 .nav-item, .folder-row { height: 40px; }
+.project-create-row { height: 40px; margin-inline: 14px; border-radius: 12px; }
+.project-create-row .row-link { padding: 0; }
+.project-add-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+}
 
 .section-head {
   position: relative;

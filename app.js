@@ -4,6 +4,45 @@
   const tooltip = document.getElementById('tooltip');
   let tooltipOwner = null;
   let tooltipTimer;
+  const projectsSection = document.querySelector('.projects');
+  const projectsToggle = projectsSection.querySelector('.section-toggle');
+  const emptyProjectRow = projectsSection.querySelector('[data-empty-project]');
+  const headerProjectAdd = projectsSection.querySelector('[data-add-project="header"]');
+  const metricsProject = document.getElementById('metrics-project');
+  const metricsToggle = metricsProject.querySelector('[data-project-toggle]');
+  const architectureProject = document.getElementById('architecture-project');
+  let createdProjects = 0;
+
+  function setExpanded(control, expanded) {
+    const content = document.getElementById(control.getAttribute('aria-controls'));
+    control.setAttribute('aria-expanded', String(expanded));
+    content.hidden = !expanded;
+
+    if (control.matches('.section-toggle')) {
+      control.closest('[data-collapsible]').classList.toggle('is-collapsed', !expanded);
+    }
+    if (control.matches('[data-project-toggle]')) {
+      control.querySelector('[data-folder-open]').hidden = !expanded;
+      control.querySelector('[data-folder-closed]').hidden = expanded;
+    }
+  }
+
+  function addProject() {
+    if (createdProjects >= 2) return;
+
+    if (createdProjects === 0) {
+      emptyProjectRow.hidden = true;
+      metricsProject.hidden = false;
+      setExpanded(metricsToggle, true);
+      headerProjectAdd.hidden = false;
+    } else {
+      architectureProject.hidden = false;
+    }
+
+    createdProjects += 1;
+    setExpanded(projectsToggle, true);
+    if (createdProjects === 1) metricsToggle.focus({ preventScroll: true });
+  }
 
   function hideTooltip() {
     clearTimeout(tooltipTimer);
@@ -59,17 +98,18 @@
     event.preventDefault();
     hideTooltip();
 
-    if (!link.matches('.section-toggle')) return;
-    const content = document.getElementById(link.getAttribute('aria-controls'));
-    const wasExpanded = link.getAttribute('aria-expanded') === 'true';
-    link.setAttribute('aria-expanded', String(!wasExpanded));
-    content.hidden = wasExpanded;
-    link.closest('[data-collapsible]').classList.toggle('is-collapsed', wasExpanded);
+    if (link.matches('[data-add-project]')) {
+      addProject();
+      return;
+    }
+    if (link.matches('.section-toggle, [data-project-toggle]')) {
+      setExpanded(link, link.getAttribute('aria-expanded') !== 'true');
+    }
   });
 
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') hideTooltip();
-    if (event.key === ' ' && event.target.matches('.section-toggle')) {
+    if (event.key === ' ' && event.target.matches('.section-toggle, [data-project-toggle], [data-add-project]')) {
       event.preventDefault();
       event.target.click();
     }
