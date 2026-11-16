@@ -1,0 +1,80 @@
+(() => {
+  'use strict';
+
+  const tooltip = document.getElementById('tooltip');
+  let tooltipOwner = null;
+  let tooltipTimer;
+
+  function hideTooltip() {
+    clearTimeout(tooltipTimer);
+    tooltip.hidden = true;
+    tooltipOwner?.removeAttribute('aria-describedby');
+    tooltipOwner = null;
+  }
+
+  function showTooltip(control) {
+    hideTooltip();
+    tooltipOwner = control;
+    tooltip.textContent = control.dataset.tooltip;
+    tooltip.hidden = false;
+    control.setAttribute('aria-describedby', tooltip.id);
+
+    const anchor = control.getBoundingClientRect();
+    const tip = tooltip.getBoundingClientRect();
+    const margin = 8;
+    const gap = 6;
+    let left = anchor.left + (anchor.width - tip.width) / 2;
+    let top = anchor.bottom + gap;
+
+    if (control.dataset.tooltipPlacement === 'right') {
+      left = anchor.right + 4;
+      top = anchor.top + (anchor.height - tip.height) / 2;
+      if (left + tip.width > window.innerWidth - margin) {
+        left = anchor.left - tip.width - 4;
+      }
+    } else if (top + tip.height > window.innerHeight - margin) {
+      top = anchor.top - tip.height - gap;
+    }
+
+    tooltip.style.left = `${Math.max(margin, Math.min(left, window.innerWidth - tip.width - margin))}px`;
+    tooltip.style.top = `${Math.max(margin, Math.min(top, window.innerHeight - tip.height - margin))}px`;
+  }
+
+  document.querySelectorAll('[data-tooltip]').forEach((control) => {
+    control.addEventListener('pointerenter', () => {
+      hideTooltip();
+      tooltipTimer = setTimeout(() => showTooltip(control), 300);
+    });
+    control.addEventListener('pointerleave', () => {
+      clearTimeout(tooltipTimer);
+      if (document.activeElement !== control) hideTooltip();
+    });
+    control.addEventListener('focus', () => showTooltip(control));
+    control.addEventListener('blur', hideTooltip);
+  });
+
+  document.addEventListener('click', (event) => {
+    const link = event.target.closest('a[href="#"]');
+    if (!link) return;
+    event.preventDefault();
+    hideTooltip();
+
+    if (!link.matches('.section-toggle')) return;
+    const content = document.getElementById(link.getAttribute('aria-controls'));
+    const wasExpanded = link.getAttribute('aria-expanded') === 'true';
+    link.setAttribute('aria-expanded', String(!wasExpanded));
+    content.hidden = wasExpanded;
+    link.closest('[data-collapsible]').classList.toggle('is-collapsed', wasExpanded);
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') hideTooltip();
+    if (event.key === ' ' && event.target.matches('.section-toggle')) {
+      event.preventDefault();
+      event.target.click();
+    }
+  });
+
+  window.addEventListener('resize', hideTooltip);
+  document.addEventListener('scroll', hideTooltip, true);
+})();
