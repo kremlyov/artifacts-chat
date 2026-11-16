@@ -36,7 +36,7 @@ a:focus-visible { outline: 2px solid #7a55ff; outline-offset: 2px; }
 
 .sidebar {
   min-height: 0;
-  padding: 16px 10px 10px;
+  padding: 14px 10px 10px;
   display: flex;
   flex-direction: column;
 }
@@ -50,12 +50,24 @@ a:focus-visible { outline: 2px solid #7a55ff; outline-offset: 2px; }
   height: 40px;
   flex: none;
   justify-content: space-between;
-  padding: 0 2px 0 6px;
-  margin-bottom: 12px;
+  padding: 0 0 0 4px;
+  margin-bottom: 10px;
 }
-.brand { gap: 6px; color: #000; }
+.brand { gap: 6px; height: 40px; color: #000; }
+.brand-mark {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  width: 40px;
+  height: 40px;
+}
+.brand-mark img { width: 100%; height: auto; aspect-ratio: 1293 / 1216; object-fit: cover; }
 .brand strong { font: 900 26px/28px var(--text-font); letter-spacing: 0; }
-.header-tools, .composer-tools { gap: 8px; }
+.header-tools { gap: 4px; }
+.header-tools .icon-button { width: 40px; height: 40px; }
+.composer-tools { gap: 8px; }
 .icon-button {
   width: 36px;
   height: 36px;
@@ -96,7 +108,7 @@ a:focus-visible { outline: 2px solid #7a55ff; outline-offset: 2px; }
 .section-head {
   position: relative;
   flex: none;
-  height: 24px;
+  height: 28px;
   padding: 0 4px 0 14px;
   justify-content: space-between;
 }
