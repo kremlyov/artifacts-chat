@@ -21,6 +21,52 @@
   const metricsToggle = metricsProject.querySelector('[data-project-toggle]');
   const architectureProject = document.getElementById('architecture-project');
   let createdProjects = 0;
+  const workspace = document.querySelector('.workspace');
+  const artifactsPortal = document.querySelector('.artifacts-portal');
+  const artifactsFrame = artifactsPortal.querySelector('iframe');
+  const artifactsNavigation = document.querySelector('.navigation [data-open-artifacts]');
+  const chatNavigation = document.querySelector('.navigation [data-open-ai]');
+  let artifactsOpen = false;
+  let sidebarBeforeArtifacts = narrowScreen.matches;
+
+  function notifyArtifacts() {
+    artifactsFrame.contentWindow?.postMessage({ type: 'artifacts:visibility', active: artifactsOpen }, window.location.origin);
+  }
+
+  function setArtifactsOpen(open) {
+    if (artifactsOpen === open) return;
+    hideTooltip();
+    if (open) {
+      sidebarBeforeArtifacts = app.classList.contains('is-sidebar-collapsed');
+      setSidebarCollapsed(true);
+      if (workspace.contains(document.activeElement)) artifactsNavigation.focus({ preventScroll: true });
+    }
+    artifactsOpen = open;
+    app.classList.toggle('is-artifacts-open', open);
+    workspace.inert = open;
+    workspace.setAttribute('aria-hidden', String(open));
+    artifactsPortal.inert = !open;
+    artifactsPortal.setAttribute('aria-hidden', String(!open));
+    artifactsFrame.tabIndex = open ? 0 : -1;
+    sidebarToggle.inert = open;
+    sidebarToggle.setAttribute('aria-hidden', String(open));
+    document.querySelectorAll('.navigation .nav-item').forEach((item) => item.removeAttribute('aria-current'));
+    (open ? artifactsNavigation : chatNavigation).closest('.nav-item').setAttribute('aria-current', 'page');
+    if (!open) setSidebarCollapsed(narrowScreen.matches || sidebarBeforeArtifacts);
+    hideTooltip();
+    notifyArtifacts();
+  }
+
+  artifactsFrame.addEventListener('load', notifyArtifacts);
+  window.addEventListener('message', (event) => {
+    if (event.origin !== window.location.origin || event.source !== artifactsFrame.contentWindow) return;
+    if (event.data?.type === 'artifacts:ready') notifyArtifacts();
+    if (event.data?.type === 'artifacts:state' && typeof event.data.state === 'string') {
+      app.dataset.artifactsState = event.data.state;
+      if (/^\d+px$/.test(event.data.chatWidth || '')) app.style.setProperty('--artifact-chat-width', event.data.chatWidth);
+    }
+  });
+
 
   function setSidebarCollapsed(collapsed) {
     hideTooltip();
@@ -159,7 +205,9 @@
   sidebarToggle.addEventListener('click', () => {
     setSidebarCollapsed(!app.classList.contains('is-sidebar-collapsed'));
   });
-  narrowScreen.addEventListener('change', (event) => setSidebarCollapsed(event.matches));
+  narrowScreen.addEventListener('change', (event) => {
+    if (!artifactsOpen) setSidebarCollapsed(event.matches);
+  });
   setSidebarCollapsed(narrowScreen.matches);
 
   document.addEventListener('click', (event) => {
@@ -168,6 +216,16 @@
     event.preventDefault();
     hideTooltip();
     if (event.detail > 0 && link.matches('.section-head .row-action')) link.blur();
+
+    if (link.matches('[data-open-artifacts]')) {
+      setArtifactsOpen(true);
+      return;
+    }
+    if (link.matches('[data-open-ai]')) {
+      setArtifactsOpen(false);
+      return;
+    }
+
 
     if (link.matches('[data-add-project]')) {
       addProject();

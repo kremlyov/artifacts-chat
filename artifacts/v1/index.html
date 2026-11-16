@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f2f2f2">
+  <meta name="description" content="Опишите свою идею. Чат для создания веб-приложений — интерактивный прототип Artifacts AI.">
+  <title>Artifacts AI — создавайте приложения</title>
+  <link rel="preload" href="../assets/ys-text-regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../assets/ys-text-bold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="generation.css">
+  <script defer src="project-previews.js"></script>
+  <script defer src="../vendor/lottie_light.min.js"></script>
+  <script defer src="generation.js"></script>
+  <script defer src="app.js"></script>
+  <link rel="stylesheet" href="../version-switcher.css">
+  <script defer src="../version-switcher.js"></script>
+</head>
+<body>
+  <div class="app" data-state="populated">
+    <aside class="sidebar" aria-label="Навигация и приложения">
+      <button class="brand" id="home">Artifacts AI</button>
+      <nav class="navigation">
+        <button class="nav-item" id="showcase"><img src="../assets/47d36.svg" alt="">Витрина</button>
+        <button class="nav-item" id="settings"><img src="../assets/9afb6.svg" alt="">Настройки</button>
+      </nav>
+      <div class="stack-wrap">
+        <div class="stack-scroll" role="region" aria-label="Созданные приложения. Вертикальная прокрутка" tabindex="0">
+          <div class="stack-track" id="app-list"></div>
+        </div>
+      </div>
+      <div class="sidebar-footer"><button class="all-apps" id="all-apps">Все приложения</button></div>
+    </aside>
+    <main id="main" class="main">
+      <section class="hero" aria-labelledby="headline">
+        <header class="hero-heading">
+          <h1 id="headline">Опишите свою идею</h1>
+          <p>Соберу по ней веб-приложение</p>
+        </header>
+        <div class="composer-area">
+          <div class="composer-options">
+            <div class="segments" role="group" aria-label="Инструмент создания">
+              <span class="segment-indicator" aria-hidden="true"></span>
+              <button aria-pressed="true" data-provider="OpenCode">OpenCode</button>
+              <button aria-pressed="false" data-provider="Codex">Codex</button>
+              <button aria-pressed="false" data-provider="Другое">Другое</button>
+            </div>
+            <div class="model-picker">
+              <button class="model-toggle" id="model-toggle" aria-expanded="false" aria-controls="model-menu"><span>Модель:</span> <span id="model-name">GLM 5.2</span><img src="../assets/67140.svg" alt=""></button>
+              <div class="model-menu" id="model-menu" hidden>
+                <button data-model="GLM 5.2" aria-pressed="true">GLM 5.2<span>✓</span></button>
+                <button data-model="GPT-5" aria-pressed="false">GPT-5<span></span></button>
+                <button data-model="Claude Sonnet" aria-pressed="false">Claude Sonnet<span></span></button>
+              </div>
+            </div>
+          </div>
+          <form class="composer" id="composer">
+            <div class="attachments" id="attachments" hidden></div>
+            <textarea id="prompt" aria-label="Опишите идею приложения" placeholder="Спросите о чём угодно" rows="1" maxlength="4000"></textarea>
+            <div class="composer-footer">
+              <button class="icon-button" id="attach" type="button" aria-label="Добавить файл"><img src="../assets/7c946.svg" alt=""></button>
+              <input id="file-input" type="file" accept="image/*,.pdf,.txt,.md" multiple hidden>
+              <div class="right-actions">
+                <button class="icon-button" id="microphone" type="button" aria-label="Ввести голосом"><img src="../assets/03d43.svg" alt=""></button>
+                <button class="icon-button send" type="submit" aria-label="Отправить идею"><img src="../assets/5cc2f.svg" alt=""></button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </section>
+      <section class="conversation" id="conversation" aria-label="Чат" hidden></section>
+      <section class="gallery" id="gallery" aria-label="Примеры приложений"></section>
+    </main>
+  </div>
+  <section id="generation-screen" class="generation-screen" aria-labelledby="generation-heading" tabindex="-1" hidden>
+    <h1 id="generation-heading" class="generation-heading">Пока ждём, расскажу, интересное</h1>
+    <div class="generation-facts"><p id="generation-fact" class="generation-fact"></p></div>
+    <ol class="generation-stages" aria-label="Этапы создания приложения">
+      <li data-generation-stage data-state="pending"><span class="generation-stage-icon" aria-hidden="true"><img class="generation-check" src="../assets/4b27a.svg" alt="" hidden></span><span class="generation-stage-text">Разбираю вашу идею</span><span class="generation-sr stage-description">Ожидание</span></li>
+      <li data-generation-stage data-state="pending"><span class="generation-stage-icon" aria-hidden="true"><img class="generation-check" src="../assets/4b27a.svg" alt="" hidden></span><span class="generation-stage-text">Собираю структуру страницы</span><span class="generation-sr stage-description">Ожидание</span></li>
+      <li data-generation-stage data-state="pending"><span class="generation-stage-icon" aria-hidden="true"><img class="generation-check" src="../assets/4b27a.svg" alt="" hidden></span><span class="generation-stage-text">Подбираю визуальный язык</span><span class="generation-sr stage-description">Ожидание</span></li>
+      <li data-generation-stage data-state="pending"><span class="generation-stage-icon" aria-hidden="true"><img class="generation-check" src="../assets/4b27a.svg" alt="" hidden></span><span class="generation-stage-text">Расставляю последние акценты</span><span class="generation-sr stage-description">Ожидание</span></li>
+    </ol>
+    <div id="generation-announcement" class="generation-sr" role="status" aria-live="polite" aria-atomic="true"></div>
+    <div id="generation-preloader" class="generation-preloader" aria-hidden="true"></div>
+  </section>
+  <dialog id="settings-dialog" class="dialog settings-dialog" aria-labelledby="settings-title">
+    <div class="dialog-heading"><h2 id="settings-title">Настройки</h2><button class="close-button" data-close aria-label="Закрыть">×</button></div>
+    <p class="muted">Посмотрите оба состояния макета.</p>
+    <fieldset class="state-field"><legend>Созданные приложения</legend><label><input type="radio" name="screen-state" value="empty">Без приложений</label><label><input type="radio" name="screen-state" value="populated">С приложениями</label></fieldset>
+    <label class="switch-row"><span>Стопки превью<small>Карточки наезжают друг на друга по краям ленты</small></span><input id="stack-switch" type="checkbox" role="switch" checked></label>
+    <button class="primary-button" id="settings-done">Готово</button>
+  </dialog>
+  <dialog id="preview-dialog" class="dialog preview-dialog" aria-labelledby="preview-title">
+    <div class="dialog-heading"><div><span class="eyebrow" id="preview-label"></span><h2 id="preview-title"></h2></div><button class="close-button" data-close aria-label="Закрыть">×</button></div>
+    <div id="preview-content"></div>
+    <div class="preview-footer"><p class="muted" id="preview-note"></p><button class="primary-button" id="preview-action"></button></div>
+  </dialog>
+  <dialog id="library-dialog" class="dialog library-dialog" aria-labelledby="library-title">
+    <div class="dialog-heading"><h2 id="library-title">Мои приложения <span id="app-count"></span></h2><button class="close-button" data-close aria-label="Закрыть">×</button></div>
+    <div id="library-grid" class="library-grid"></div>
+  </dialog>
+  <div id="toast" class="toast" role="status" hidden></div>
+</body>
+</html>

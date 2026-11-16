@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="ru">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f2f2f2">
+  <meta name="description" content="Опишите свою идею. Чат для создания веб-приложений — интерактивный прототип Artifacts AI.">
+  <title>Artifacts AI — создавайте приложения</title>
+  <link rel="preload" href="assets/ys-text-regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/ys-text-bold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="workspace.css">
+  <link rel="stylesheet" href="workspace-v2.css">
+  <link rel="stylesheet" href="precise-edits.css">
+
+  <script defer src="vendor/lottie_light.min.js"></script>
+  <script defer src="workspace-v2.js"></script>
+  <script defer src="precise-edits.js"></script>
+  <script defer src="generation.js"></script>
+  <script defer src="app.js"></script>
+  <link rel="stylesheet" href="home-v2.css">
+  <link rel="stylesheet" href="generation.css">
+  <link rel="stylesheet" href="active-chats.css">
+  <script defer src="active-chats.js"></script>
+  <link rel="stylesheet" href="version-switcher.css">
+  <script defer src="version-switcher.js"></script>
+<link rel="stylesheet" href="integration.css?v=20151768f7">
+<script defer src="integration.js?v=39930fdaa1"></script>
+</head>
+<body class="home-screen workspace-v2 interface-v2 ai-integrated ai-entrance-pending" data-flow-state="idle">
+  <div class="app workspace-layout" data-node-id="108:16370">
+    <main class="home-panel" id="main">
+      <header class="home-header">
+        <a class="flow-project workspace-home" href="./" aria-label="Новый проект"><img src="assets/495c5.svg" alt=""><span>Новый проект</span></a>
+        <button class="brand" id="home" type="button">Artifacts AI</button>
+        <button class="home-settings" id="settings" type="button" aria-label="Настройки"><img src="assets/11d1b.svg" alt=""></button>
+      </header>
+      <section class="hero" aria-labelledby="headline">
+        <header class="hero-heading">
+          <h1 id="headline">Опишите свою идею</h1>
+          <p>Соберу по ней веб-приложение</p>
+
+        </header>
+        <div class="composer-area">
+          <div class="composer-options">
+            <div class="segments" role="group" aria-label="Инструмент создания">
+              <span class="segment-indicator" aria-hidden="true"></span>
+              <button aria-pressed="true" data-provider="OpenCode">OpenCode</button>
+              <button aria-pressed="false" data-provider="Codex">Codex</button>
+              <button aria-pressed="false" data-provider="Другое">Другое</button>
+            </div>
+            <div class="model-picker">
+              <button class="model-toggle" id="model-toggle" aria-expanded="false" aria-controls="model-menu"><span>Модель:</span> <span id="model-name">GLM 5.2</span><img src="assets/67140.svg" alt=""></button>
+              <div class="model-menu" id="model-menu" hidden>
+                <button data-model="GLM 5.2" aria-pressed="true">GLM 5.2<span>✓</span></button>
+                <button data-model="GPT-5" aria-pressed="false">GPT-5<span></span></button>
+                <button data-model="Claude Sonnet" aria-pressed="false">Claude Sonnet<span></span></button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+      <div class="flow-transcript" aria-label="Чат с агентом" hidden>
+        <div class="workspace-user-row flow-entry"><p class="workspace-user-bubble" id="flow-user-message"></p></div>
+        <div class="workspace-answer">
+          <p id="flow-summary" class="flow-entry" hidden></p>
+          <div class="flow-progress flow-entry" hidden><div id="flow-preloader" class="flow-preloader" aria-hidden="true"></div><span id="flow-progress-text"></span></div>
+          <div class="flow-result flow-entry" hidden><h2>Готово</h2><p>Добавила выбор языков, поле перевода и блок «Переводчик AI». Прототип готов — можно смотреть и обсуждать правки.</p></div>
+        </div>
+      </div>
+      <div class="flow-composer-dock">
+          <form class="composer" id="composer">
+            <div class="attachments" id="attachments" hidden></div>
+            <textarea id="prompt" aria-label="Опишите идею приложения" placeholder="Спросите о чём угодно" rows="1" maxlength="4000"></textarea>
+            <div class="composer-footer">
+              <button class="icon-button" id="attach" type="button" aria-label="Добавить файл"><img src="assets/7c946.svg" alt=""></button>
+              <input id="file-input" type="file" accept="image/*,.pdf,.txt,.md" multiple hidden>
+              <div class="right-actions">
+                <button class="icon-button" id="microphone" type="button" aria-label="Ввести голосом"><img src="assets/03d43.svg" alt=""></button>
+                <button class="icon-button send" type="submit" aria-label="Отправить идею"><img src="assets/5cc2f.svg" alt=""></button>
+              </div>
+            </div>
+          </form>
+      </div>
+    </main>
+    <section class="gallery" id="gallery" aria-label="Мои приложения и примеры"></section>
+    <div class="workspace-divider" role="separator" aria-label="Изменить ширину чата" aria-orientation="vertical" aria-valuemin="240" aria-valuemax="640" aria-valuenow="320" tabindex="0"><span></span></div>
+    <section class="workspace-left" inert aria-hidden="true" aria-label="Созданное приложение">
+      <header class="workspace-header">
+        <div class="workspace-start-actions"><a class="workspace-control workspace-mobile-back workspace-home" href="./" aria-label="Вернуться на главную"><img src="assets/495c5.svg" alt=""></a><button class="workspace-control precise-control" id="precise-control" type="button" aria-label="Точечные правки" aria-controls="precise-layer" aria-pressed="false"><span class="precise-icon"><img class="precise-camera" src="assets/d803b.svg" alt=""><img class="precise-pointer" src="assets/88d21-v2.svg" alt=""></span><span class="precise-label">Точечные правки</span></button></div>
+        <div class="device-picker" role="group" aria-label="Размер превью">
+          <span class="device-indicator" aria-hidden="true"></span>
+          <button class="workspace-control" type="button" data-device="desktop" aria-pressed="true" aria-label="Компьютер"><img src="assets/40468.svg" alt=""></button>
+          <button class="workspace-control" type="button" data-device="mobile" aria-pressed="false" aria-label="Телефон"><img src="assets/ce081.svg" alt=""></button>
+        </div>
+        <div class="workspace-actions"><button class="workspace-control selected refresh-control" type="button" aria-label="Обновить превью"><img src="assets/1e754.svg" alt=""></button><button class="workspace-control workspace-publish" type="button">Поделиться</button></div>
+      </header>
+      <main class="application-preview" aria-label="Превью приложения Переводчик AI" data-node-id="63:6167">
+        <nav class="translator-navigation" aria-label="Меню приложения">
+          <div class="translator-logo"><img src="assets/a5103-v2.svg" alt="Переводчик"></div>
+          <div class="translator-menu">
+            <button class="translator-icon" type="button" disabled aria-label="Перевод текста"><img src="assets/0a4e3.svg" alt=""></button>
+            <button class="translator-icon" type="button" disabled aria-label="Переводчик AI"><img src="assets/f5e0d.svg" alt=""></button>
+            <button class="translator-icon" type="button" disabled aria-label="Избранное"><img src="assets/67b73.svg" alt=""></button>
+            <button class="translator-icon" type="button" disabled aria-label="Сервисы"><img src="assets/1453d.svg" alt=""></button>
+            <button class="translator-icon" type="button" disabled aria-label="История"><img src="assets/b5808.svg" alt=""></button>
+          </div>
+          <div class="translator-nav-space"></div>
+          <div class="translator-download"><img src="assets/a5a35.svg" alt="Мобильное приложение"><button class="translator-download-button" type="button" disabled aria-label="Скачать"><img src="assets/3809b.svg" alt=""></button></div>
+          <div class="translator-bottom-menu">
+            <button class="translator-icon" type="button" disabled aria-label="Помощь"><img src="assets/3e865.svg" alt=""></button>
+            <button class="translator-icon" type="button" disabled aria-label="Настройки"><img src="assets/c2c19.svg" alt=""></button>
+            <button class="translator-icon" type="button" disabled aria-label="Профиль"><span class="translator-avatar"><img src="assets/14d52.png" alt=""></span></button>
+          </div>
+        </nav>
+        <div class="translator-content">
+          <section class="translation-section" aria-label="Перевод">
+            <div class="language-selector">
+              <div class="language-suggestions left-suggestions"><span>Немецкий</span><span>Идиш</span></div>
+              <div class="language-pair"><button class="language-chip" type="button" disabled>Английский</button><button class="translator-icon" type="button" disabled aria-label="Поменять языки"><img src="assets/0fec8.svg" alt=""></button><button class="language-chip" type="button" disabled>Русский</button></div>
+              <div class="language-suggestions right-suggestions"><span>Украинский</span><span>Китайский</span></div>
+            </div>
+            <div class="translation-panels">
+              <div class="translation-source"><p class="translation-placeholder">Введите текст</p><div class="translation-controls"><div class="translation-controls-left"><button class="translator-icon" type="button" disabled aria-label="Клавиатура"><img src="assets/29650.svg" alt=""></button><button class="paste-control" type="button" disabled>Вставить</button></div><div class="translation-controls-right"><button class="translator-icon" type="button" disabled aria-label="Прикрепить"><img src="assets/14bc9.svg" alt=""></button><button class="translator-icon" type="button" disabled aria-label="Микрофон"><img src="assets/4d3c9.svg" alt=""></button></div></div></div>
+              <div class="translation-promo"><div class="promo-cat-one"><div class="promo-cat-crop"><img src="assets/a9709.png" alt=""></div></div><div class="promo-cat-two"><div class="promo-cat-crop"><img src="assets/9b120.png" alt=""></div></div><p class="translation-phrase">It’s raining cats <br>and dogs today</p><div class="translation-controls promo-controls"><button class="idiom-control" type="button" disabled>Объясни идиому</button></div></div>
+            </div>
+          </section>
+          <section class="translator-ai" aria-label="Переводчик AI">
+            <div class="ai-artwork" aria-hidden="true"><div class="ai-artwork-source"><img class="ai-artwork-background" src="assets/d3baa.svg" alt=""><img class="ai-artwork-dog" src="assets/4322b.png" alt=""><span class="ai-artwork-patch"></span></div></div>
+            <h1>Lost in Translation?<br>Спросите Переводчик AI</h1>
+            <div class="translator-ai-input"><p>Спросить Переводчик AI</p><div class="translator-ai-actions"><button class="translator-icon" type="button" disabled aria-label="Голосовой ввод"><img src="assets/4d3c9.svg" alt=""></button><button class="translator-icon ai-send" type="button" disabled aria-label="Отправить"><img src="assets/16ea4.svg" alt=""></button></div></div>
+          </section>
+        </div>
+      </main>
+    </section>
+  </div>
+  <dialog id="settings-dialog" class="dialog settings-dialog" aria-labelledby="settings-title">
+    <div class="dialog-heading"><h2 id="settings-title">Настройки</h2><button class="close-button" data-close aria-label="Закрыть">×</button></div>
+    <button class="primary-button" id="settings-done">Готово</button>
+  </dialog>
+  <dialog id="preview-dialog" class="dialog preview-dialog" aria-labelledby="preview-title">
+    <div class="dialog-heading"><div><span class="eyebrow" id="preview-label"></span><h2 id="preview-title"></h2></div><button class="close-button" data-close aria-label="Закрыть">×</button></div>
+    <div id="preview-content"></div>
+    <div class="preview-footer"><p class="muted" id="preview-note"></p><button class="primary-button" id="preview-action"></button></div>
+  </dialog>
+  <div class="precise-layer" id="precise-layer" hidden>
+    <div class="precise-surface" aria-hidden="true"></div>
+    <div class="precise-outline precise-hover" aria-hidden="true" hidden></div>
+    <div class="precise-outline precise-selected" aria-hidden="true" hidden></div>
+    <span class="precise-pin" aria-hidden="true" hidden data-node-id="65:8363">1</span>
+    <form class="composer precise-composer" aria-label="Точечная правка" hidden data-node-id="65:8725">
+      <textarea class="precise-input" aria-label="Что сделать с этим объектом?" placeholder="Что сделать с этим объектом?" rows="1"></textarea>
+      <div class="composer-footer">
+        <button class="icon-button" type="button" aria-label="Добавить файл к правке"><img src="assets/7c946.svg" alt=""></button>
+        <div class="right-actions">
+          <button class="icon-button" type="button" aria-label="Ввести правку голосом"><img src="assets/03d43.svg" alt=""></button>
+          <button class="icon-button send" type="button" aria-label="Отправить точечную правку"><img src="assets/5cc2f.svg" alt=""></button>
+        </div>
+      </div>
+    </form>
+    <p class="precise-announcement" role="status" aria-live="polite"></p>
+  </div>
+  <p class="flow-announcement" id="flow-announcement" role="status" aria-live="polite" aria-atomic="true"></p>
+  <div id="toast" class="toast" role="status" hidden></div>
+</body>
+</html>

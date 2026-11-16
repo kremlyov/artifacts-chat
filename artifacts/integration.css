@@ -1,0 +1,86 @@
+/* AI shell: viewport edges and spacing from Figma 556:13129. */
+.ai-integrated.home-screen .app {
+  --home-width: clamp(360px, 41.038961vw, 632px);
+  --flow-gap: 28px;
+  height: 100dvh;
+  padding: 0;
+  gap: var(--flow-gap);
+}
+.ai-integrated.home-screen .home-panel {
+  height: 100dvh;
+  padding-inline: 36px;
+  border-radius: 36px;
+}
+.ai-integrated.home-screen .home-header {
+  height: 72px;
+  padding-bottom: 28px;
+  background: linear-gradient(to bottom, #fff 68%, #fff0);
+}
+.ai-integrated.home-screen[data-flow-state="idle"] .hero { transform: translateY(-69px); }
+.ai-integrated.home-screen[data-flow-state="idle"] .flow-composer-dock { left: 36px; right: 36px; }
+.ai-integrated.home-screen .gallery {
+  left: calc(var(--home-width) + var(--flow-gap));
+  width: calc(100vw - var(--home-width) - var(--flow-gap));
+  height: 100dvh;
+  padding: 12px 12px 12px 0;
+  gap: 28px;
+}
+.ai-integrated.home-screen .workspace-left {
+  inset: 0 0 0 calc(var(--chat-width) + 16px);
+  border-radius: 0;
+}
+.ai-integrated.workspace-v2 .workspace-header { height: 68px; padding-inline: 10px; }
+.ai-integrated.workspace-v2 .application-preview { border-radius: 36px; }
+.ai-integrated.workspace-v2 .workspace-divider { left: var(--chat-width); }
+.ai-integrated.home-screen:is([data-flow-state="revealing"], [data-flow-state="workspace"]) .app {
+  padding: 0;
+  gap: 16px;
+}
+.ai-integrated.home-screen:is([data-flow-state="revealing"], [data-flow-state="workspace"]) .home-panel {
+  height: 100dvh;
+  border-radius: 36px;
+}
+.ai-integrated.home-screen:is([data-flow-state="revealing"], [data-flow-state="workspace"]) .flow-transcript { top: 84px; }
+
+/* Enter once per visit; do not override the prototype's generation transitions. */
+.ai-integrated.ai-entrance-pending[data-flow-state="idle"] :is(.home-header, .hero-heading, .composer-options, .flow-composer-dock, .gallery) { opacity: 0; }
+.ai-integrated.ai-entering[data-flow-state="idle"] :is(.home-header, .hero-heading, .composer-options, .flow-composer-dock) {
+  animation: integrated-content-in 320ms cubic-bezier(.22, 1, .36, 1) 160ms both;
+}
+.ai-integrated.ai-entering[data-flow-state="idle"] .gallery {
+  animation: integrated-gallery-in 560ms cubic-bezier(.22, 1, .36, 1) 240ms both;
+}
+@keyframes integrated-content-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes integrated-gallery-in {
+  from { opacity: 0; transform: translateX(-48px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@media (min-width: 801px) and (max-width: 1300px) {
+  .ai-integrated.home-screen .app { --flow-gap: 20px; }
+  .ai-integrated.home-screen .gallery { gap: 20px; }
+  .ai-integrated.home-screen .home-panel { padding-inline: 28px; }
+  .ai-integrated.home-screen[data-flow-state="idle"] .flow-composer-dock { left: 28px; right: 28px; }
+}
+@media (max-height: 650px) and (min-width: 801px) {
+  .ai-integrated.home-screen[data-flow-state="idle"] .hero { transform: translateY(-25px); }
+}
+@media (max-width: 800px) {
+  .ai-integrated.home-screen .app { height: auto; padding: 0; gap: 12px; }
+  .ai-integrated.home-screen .home-panel { height: 100dvh; padding-inline: 24px; }
+  .ai-integrated.home-screen[data-flow-state="idle"] .hero { transform: none; }
+  .ai-integrated.home-screen[data-flow-state="idle"] .flow-composer-dock { left: 24px; right: 24px; }
+  .ai-integrated.home-screen .gallery { position: relative; inset: auto; width: 100%; height: auto; padding: 12px; margin: 0; gap: 16px; }
+  .ai-integrated.home-screen .workspace-left { position: relative; inset: auto; height: 900px; }
+  .ai-integrated.home-screen:is([data-flow-state="revealing"], [data-flow-state="workspace"]) .home-panel { height: 700px; }
+  .ai-integrated.home-screen:is([data-flow-state="revealing"], [data-flow-state="workspace"]) .gallery { position: absolute; top: calc(100dvh + 8px); }
+}
+@media (max-width: 480px) {
+  .ai-integrated.home-screen .home-panel { padding-inline: 20px; }
+  .ai-integrated.home-screen[data-flow-state="idle"] .flow-composer-dock { left: 20px; right: 20px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ai-integrated.ai-entering :is(.home-header, .hero-heading, .composer-options, .flow-composer-dock, .gallery) { animation: none !important; }
+}

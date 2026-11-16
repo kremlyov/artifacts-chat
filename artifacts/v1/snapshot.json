@@ -1,0 +1,17 @@
+{
+  "name": "Версия 1",
+  "source_commit": "c0e0388e94e2a541689f4b1dfa704789a720adeb",
+  "files": {
+    "generation.css": "1786daff5c6fc05f3ec97c5a50011fad19c15ef19e30ae6612fd3aabb23d70f5",
+    "index.html": "8b9460bafab3cd777f3afa8a4214482f1ffaa3b7f5617d49dee9404c7727ad50",
+    "styles.css": "a54126b43887ce445667e655c0f4922b52a3b36190acb00187e1537b47669486",
+    "precise-edits.js": "7b23b2012e2a1d27c027c094f5c640dcf3b2b0a3763649ea43debb3a621244fd",
+    "generation.js": "1eb5214867ea5173a4bb8348d60807c9e6b2b951ff8a3a735c23f72d66ed1e6a",
+    "workspace.js": "67bb4f4d250f0313df2448a8d731cd47363205639407d7b8b9d50ec2fb4e0989",
+    "workspace.css": "44417a6bc62d6db4e863de79b98e8a99ae35286c044b7381b219f61e31e9cce2",
+    "workspace.html": "9dd041beaf10fc1d88b0ddfaa82c0d32486f8cfe6008fadb349ab81d3bf18fab",
+    "project-previews.js": "0726000d04ce9c3da3728871b1067c1c35c2c33b9c2056e928f28fa0b9d7d13f",
+    "precise-edits.css": "cb8c8e8c084fb058583222e81a7e5def6c2500cbb4073c5787028db881c9ef2e",
+    "app.js": "bbd72b6b266478b47593011f6823b52325b0dbca31be6f13a6765087e57bf415"
+  }
+}
