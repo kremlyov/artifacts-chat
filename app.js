@@ -136,7 +136,7 @@
     control.addEventListener('blur', hideTooltip);
   });
 
-  document.querySelectorAll('.navigation .row-link').forEach((control) => {
+  document.querySelectorAll('[data-animated-icon]').forEach((control) => {
     const icon = control.querySelector('.nav-icon');
     const playIcon = () => {
       if (!reducedMotion.matches) control.classList.add('is-icon-animating');

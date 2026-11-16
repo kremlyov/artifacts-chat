@@ -164,7 +164,11 @@ a:focus-visible, .icon-button:focus-visible { outline: 2px solid #7a55ff; outlin
 .is-icon-animating .nav-icon .voice-capsule,
 .is-icon-animating .nav-icon .voice-waves path,
 .is-icon-animating .nav-icon .gem-facets,
-.is-icon-animating .nav-icon .gem-glint {
+.is-icon-animating .nav-icon .gem-glint,
+.is-icon-animating .nav-icon .search-glint,
+.is-icon-animating .nav-icon .panel-divider,
+.is-icon-animating .nav-icon .project-sheet,
+.is-icon-animating .nav-icon .folder-body {
   animation-duration: var(--icon-duration);
   animation-timing-function: var(--icon-easing);
 }
@@ -180,6 +184,65 @@ a:focus-visible, .icon-button:focus-visible { outline: 2px solid #7a55ff; outlin
 .is-icon-animating .nav-icon--gem { animation-name: nav-gem; }
 .is-icon-animating .gem-facets { animation-name: nav-facets; }
 .is-icon-animating .gem-glint { animation-name: nav-glint; }
+
+.search-glint { opacity: 0; stroke-dasharray: 1; stroke-dashoffset: 1; }
+.nav-icon--panel { --panel-shift: -2px; }
+.is-sidebar-collapsed .nav-icon--panel { --panel-shift: 5px; }
+.project-sheet { opacity: 0; }
+.folder-body { transform-box: view-box; transform-origin: 10px 17px; }
+.is-icon-animating .nav-icon--search { animation-name: nav-search; }
+.is-icon-animating .search-glint { animation-name: nav-search-glint; }
+.is-icon-animating .nav-icon--panel { animation-name: nav-panel; }
+.is-icon-animating .panel-divider { animation-name: nav-panel-divider; }
+.is-icon-animating .nav-icon--projects { animation-name: nav-projects; }
+.is-icon-animating .project-sheet { animation-name: nav-project-sheet; }
+.is-icon-animating .folder-body { animation-name: nav-folder-body; }
+.is-icon-animating .nav-icon--chats { animation-name: nav-chats; }
+
+@keyframes nav-search {
+  0%, 100% { transform: translate(0, 0) rotate(0) scale(1); }
+  28% { transform: translate(-1.2px, -.8px) rotate(-10deg) scale(1.06); }
+  58% { transform: translate(1px, .4px) rotate(5deg) scale(1.02); }
+  80% { transform: translate(-.3px, 0) rotate(-2deg) scale(1); }
+}
+@keyframes nav-search-glint {
+  0%, 12%, 100% { opacity: 0; stroke-dashoffset: 1; }
+  35%, 55% { opacity: .65; stroke-dashoffset: 0; }
+  82% { opacity: 0; stroke-dashoffset: 0; }
+}
+@keyframes nav-panel {
+  0%, 100% { transform: scale(1); }
+  35% { transform: scale(.96, 1.03); }
+  65% { transform: scale(1.02, .99); }
+}
+@keyframes nav-panel-divider {
+  0%, 100% { transform: translateX(0); }
+  35%, 50% { transform: translateX(var(--panel-shift)); }
+  76% { transform: translateX(calc(var(--panel-shift) * -.15)); }
+}
+@keyframes nav-projects {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  30% { transform: translateY(-.6px) rotate(-5deg); }
+  62% { transform: translateY(.2px) rotate(3deg); }
+  82% { transform: translateY(0) rotate(-1deg); }
+}
+@keyframes nav-project-sheet {
+  0%, 10%, 100% { opacity: 0; transform: translateY(2px); }
+  36%, 54% { opacity: 1; transform: translateY(-2.2px); }
+  82% { opacity: 0; transform: translateY(1px); }
+}
+@keyframes nav-folder-body {
+  0%, 100% { transform: scaleY(1); }
+  36%, 54% { transform: scaleY(.92); }
+  78% { transform: scaleY(1.02); }
+}
+@keyframes nav-chats {
+  0%, 100% { transform: translate(0, 0) rotate(0) scale(1); }
+  26% { transform: translate(-.7px, -.6px) rotate(-4deg) scale(1.04); }
+  56% { transform: translate(.5px, 0) rotate(3deg) scale(.98, 1.03); }
+  80% { transform: translate(0, 0) rotate(-1deg) scale(1); }
+}
+
 
 @keyframes nav-chat {
   0%, 100% { transform: rotate(0) scale(1); }
@@ -422,6 +485,10 @@ a:focus-visible, .icon-button:focus-visible { outline: 2px solid #7a55ff; outlin
 .is-sidebar-collapsed .brand, .is-sidebar-collapsed .sidebar-lists { transform: translateX(-8px); }
 .is-sidebar-collapsed .search-button { left: 10px; }
 .is-sidebar-collapsed .sidebar-toggle { left: calc(var(--sidebar-width) + 14px); opacity: .5; }
+.is-sidebar-collapsed .sidebar-toggle:focus-visible { opacity: 1; }
+@media (hover: hover) {
+  .is-sidebar-collapsed .sidebar-toggle:hover { opacity: 1; }
+}
 .is-sidebar-collapsed .navigation { margin-bottom: 12px; }
 .is-sidebar-collapsed .navigation .row-link { padding-left: 10px; }
 .is-sidebar-collapsed .compact-lists {
