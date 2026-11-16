@@ -24,7 +24,8 @@
     body.classList.toggle('ai-entrance-pending', !active);
     if (active && body.dataset.flowState === 'idle' && !reduced.matches) {
       body.classList.add('ai-entering');
-      entranceTimer = setTimeout(() => body.classList.remove('ai-entering'), 850);
+      // Includes the gallery's delay and full settling time.
+      entranceTimer = setTimeout(() => body.classList.remove('ai-entering'), 1400);
     }
     if (!active) {
       window.ArtifactsPrecise?.setEnabled(false);

@@ -1,4 +1,6 @@
 /* AI shell: viewport edges and spacing from Figma 556:13129. */
+/* Keep the shell's moving white surface visible through the gallery gaps. */
+.ai-integrated { background: transparent; }
 .ai-integrated.home-screen .app {
   --home-width: clamp(360px, 41.038961vw, 632px);
   --flow-gap: 28px;
@@ -45,17 +47,17 @@
 /* Enter once per visit; do not override the prototype's generation transitions. */
 .ai-integrated.ai-entrance-pending[data-flow-state="idle"] :is(.home-header, .hero-heading, .composer-options, .flow-composer-dock, .gallery) { opacity: 0; }
 .ai-integrated.ai-entering[data-flow-state="idle"] :is(.home-header, .hero-heading, .composer-options, .flow-composer-dock) {
-  animation: integrated-content-in 320ms cubic-bezier(.22, 1, .36, 1) 160ms both;
+  animation: integrated-content-in 440ms cubic-bezier(.25, .1, .25, 1) 220ms both;
 }
 .ai-integrated.ai-entering[data-flow-state="idle"] .gallery {
-  animation: integrated-gallery-in 560ms cubic-bezier(.22, 1, .36, 1) 240ms both;
+  animation: integrated-gallery-in 860ms cubic-bezier(.25, .1, .25, 1) 360ms both;
 }
 @keyframes integrated-content-in {
-  from { opacity: 0; transform: translateY(8px); }
+  from { opacity: 0; transform: translateY(4px); }
   to { opacity: 1; transform: translateY(0); }
 }
 @keyframes integrated-gallery-in {
-  from { opacity: 0; transform: translateX(-48px); }
+  from { opacity: 0; transform: translateX(-24px); }
   to { opacity: 1; transform: translateX(0); }
 }
 @media (min-width: 801px) and (max-width: 1300px) {
