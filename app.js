@@ -57,10 +57,16 @@
     notifyArtifacts();
   }
 
-  artifactsFrame.addEventListener('load', notifyArtifacts);
+  function artifactsReady() {
+    app.classList.add('is-artifacts-ready');
+    notifyArtifacts();
+  }
+  artifactsFrame.addEventListener('load', artifactsReady);
+  // A cached child can finish loading before this deferred shell script.
+  if (artifactsFrame.contentDocument?.readyState === 'complete' && artifactsFrame.contentDocument.URL !== 'about:blank') artifactsReady();
   window.addEventListener('message', (event) => {
     if (event.origin !== window.location.origin || event.source !== artifactsFrame.contentWindow) return;
-    if (event.data?.type === 'artifacts:ready') notifyArtifacts();
+    if (event.data?.type === 'artifacts:ready') artifactsReady();
     if (event.data?.type === 'artifacts:state' && typeof event.data.state === 'string') {
       app.dataset.artifactsState = event.data.state;
       if (/^\d+px$/.test(event.data.chatWidth || '')) app.style.setProperty('--artifact-chat-width', event.data.chatWidth);

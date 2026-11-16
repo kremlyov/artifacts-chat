@@ -711,12 +711,14 @@ h1 {
 .is-artifacts-open .workspace {
   width: var(--artifacts-home-width);
   border-radius: 36px;
+}
+.is-artifacts-open.is-artifacts-ready .workspace {
   background-color: transparent;
   transition-delay: 0s, 0s, 600ms;
 }
 .is-artifacts-open:is([data-artifacts-state="workspace"], [data-artifacts-state="revealing"]) .workspace { width: var(--artifact-chat-width, 320px); }
 .is-artifacts-open .workspace > * { opacity: 0; transition-delay: 0s; }
-.is-artifacts-open .artifacts-portal { opacity: 1; visibility: visible; transition-delay: 0s, 120ms, 0s; }
+.is-artifacts-open.is-artifacts-ready .artifacts-portal { opacity: 1; visibility: visible; transition-delay: 0s, 120ms, 0s; }
 .app.is-artifacts-open .sidebar-toggle { opacity: 0; visibility: hidden; pointer-events: none; }
 @media (max-width: 860px) {
   .app { --artifacts-home-width: calc(100vw - 60px); }
