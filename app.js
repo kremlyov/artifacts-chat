@@ -77,6 +77,7 @@
   function hideTooltip() {
     clearTimeout(tooltipTimer);
     tooltip.hidden = true;
+    tooltip.classList.remove('is-visible');
     tooltipOwner?.removeAttribute('aria-describedby');
     tooltipOwner = null;
   }
@@ -95,19 +96,26 @@
     const gap = 6;
     let left = anchor.left + (anchor.width - tip.width) / 2;
     let top = anchor.bottom + gap;
+    let placement = 'bottom';
 
     if (control.dataset.tooltipPlacement === 'right') {
+      placement = 'right';
       left = anchor.right + 4;
       top = anchor.top + (anchor.height - tip.height) / 2;
       if (left + tip.width > window.innerWidth - margin) {
         left = anchor.left - tip.width - 4;
+        placement = 'left';
       }
     } else if (top + tip.height > window.innerHeight - margin) {
       top = anchor.top - tip.height - gap;
+      placement = 'top';
     }
 
     tooltip.style.left = `${Math.max(margin, Math.min(left, window.innerWidth - tip.width - margin))}px`;
     tooltip.style.top = `${Math.max(margin, Math.min(top, window.innerHeight - tip.height - margin))}px`;
+    // The measurement above resets the previous animation before a new tooltip enters.
+    tooltip.dataset.placement = placement;
+    tooltip.classList.add('is-visible');
   }
 
   document.querySelectorAll('[data-tooltip]').forEach((control) => {

@@ -448,6 +448,8 @@ h1 {
 }
 
 .tooltip {
+  --tooltip-offset-x: 0px;
+  --tooltip-offset-y: 6px;
   position: fixed;
   z-index: 1000;
   max-width: calc(100vw - 16px);
@@ -461,8 +463,18 @@ h1 {
   white-space: nowrap;
   pointer-events: none;
 }
+.tooltip[data-placement="right"] { --tooltip-offset-x: 6px; --tooltip-offset-y: 0px; }
+.tooltip[data-placement="left"] { --tooltip-offset-x: -6px; --tooltip-offset-y: 0px; }
+.tooltip[data-placement="top"] { --tooltip-offset-y: -6px; }
+.tooltip.is-visible { animation: tooltip-appear 200ms cubic-bezier(.22, 1, .36, 1) both; }
+
+@keyframes tooltip-appear {
+  from { opacity: 0; transform: translate(var(--tooltip-offset-x), var(--tooltip-offset-y)); }
+  to { opacity: 1; transform: translate(0, 0); }
+}
 
 @media (prefers-reduced-motion: reduce) {
+  .tooltip.is-visible { animation: none; }
   .app, .sidebar, .brand, .header-tools .icon-button,
   .navigation .row-link, .navigation .row-link > span, .sidebar-lists,
   .compact-lists, .account, .profile, .usage, .username, .section-toggle img {
