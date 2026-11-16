@@ -33,7 +33,7 @@
     if (createdProjects === 0) {
       emptyProjectRow.hidden = true;
       metricsProject.hidden = false;
-      setExpanded(metricsToggle, true);
+      setExpanded(metricsToggle, false);
       headerProjectAdd.hidden = false;
     } else {
       architectureProject.hidden = false;
@@ -97,6 +97,7 @@
     if (!link) return;
     event.preventDefault();
     hideTooltip();
+    if (event.detail > 0 && link.matches('.section-head .row-action')) link.blur();
 
     if (link.matches('[data-add-project]')) {
       addProject();

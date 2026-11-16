@@ -85,8 +85,6 @@ a:focus-visible { outline: 2px solid #7a55ff; outline-offset: 2px; }
 }
 .menu-row[aria-current="page"] { background: var(--hover); }
 .nav-item, .folder-row { height: 40px; }
-.project-create-row { height: 40px; margin-inline: 14px; border-radius: 12px; }
-.project-create-row .row-link { padding: 0; }
 .project-add-icon {
   flex: none;
   display: grid;
@@ -205,7 +203,9 @@ a:focus-visible { outline: 2px solid #7a55ff; outline-offset: 2px; }
   .profile:hover, .usage:hover, .row-action:hover { background-color: var(--hover); }
   .item-row:hover { --row-color: #e6e6e6; }
   .item-row:hover .row-link { padding-right: 36px; }
-  .item-row:hover .row-action, .section-head:hover .row-action,
+  .item-row:hover .row-action,
+  .projects:hover > .section-head .row-action,
+  .recent:hover > .section-head .row-action,
   .profile:hover .profile-arrow { visibility: visible; }
 }
 
