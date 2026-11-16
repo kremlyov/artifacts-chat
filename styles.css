@@ -138,8 +138,8 @@ a:focus-visible, .icon-button:focus-visible { outline: 2px solid #7a55ff; outlin
   width: 40px;
   opacity: 0;
   visibility: hidden;
-  transform: translateY(8px);
-  transition: opacity 140ms ease, transform var(--sidebar-duration) var(--sidebar-easing), visibility 0s 140ms;
+  transform: translateX(-16px);
+  transition: opacity 200ms ease, transform 240ms var(--sidebar-easing), visibility 0s 200ms;
 }
 .compact-lists .icon-button { width: 40px; height: 40px; }
 .menu-row[aria-current="page"] { background: var(--hover); }
@@ -305,8 +305,8 @@ a:focus-visible, .icon-button:focus-visible { outline: 2px solid #7a55ff; outlin
 .is-sidebar-collapsed .compact-lists {
   opacity: 1;
   visibility: visible;
-  transform: translateY(0);
-  transition-delay: 100ms, 0s, 0s;
+  transform: translateX(0);
+  transition-delay: 80ms, 80ms, 0s;
 }
 .is-sidebar-collapsed .account { height: 108px; }
 .is-sidebar-collapsed .profile { left: -4px; width: 48px; }

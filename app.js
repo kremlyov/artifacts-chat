@@ -6,6 +6,7 @@
   let tooltipTimer;
   const app = document.querySelector('.app');
   const sidebarToggle = document.querySelector('.sidebar-toggle');
+  const searchButton = document.querySelector('.search-button');
   const sidebarLists = document.querySelector('.sidebar-lists');
   const compactLists = document.querySelector('.compact-lists');
   const compactProjects = document.querySelector('.compact-projects');
@@ -33,6 +34,7 @@
     const label = collapsed ? 'Развернуть панель' : 'Свернуть панель';
     sidebarToggle.setAttribute('aria-label', label);
     sidebarToggle.dataset.tooltip = label;
+    searchButton.dataset.tooltipPlacement = collapsed ? 'right' : 'bottom';
     sidebarLists.inert = collapsed;
     sidebarLists.setAttribute('aria-hidden', String(collapsed));
     brand.inert = collapsed;
@@ -81,6 +83,7 @@
 
   function showTooltip(control) {
     hideTooltip();
+    if (control.hasAttribute('data-tooltip-collapsed') && !app.classList.contains('is-sidebar-collapsed')) return;
     tooltipOwner = control;
     tooltip.textContent = control.dataset.tooltip;
     tooltip.hidden = false;
