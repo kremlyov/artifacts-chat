@@ -4,6 +4,13 @@
   const tooltip = document.getElementById('tooltip');
   let tooltipOwner = null;
   let tooltipTimer;
+  const app = document.querySelector('.app');
+  const sidebarToggle = document.querySelector('.sidebar-toggle');
+  const sidebarLists = document.querySelector('.sidebar-lists');
+  const compactLists = document.querySelector('.compact-lists');
+  const compactProjects = document.querySelector('.compact-projects');
+  const brand = document.querySelector('.brand');
+  const narrowScreen = window.matchMedia('(max-width: 800px)');
   const projectsSection = document.querySelector('.projects');
   const projectsToggle = projectsSection.querySelector('.section-toggle');
   const emptyProjectRow = projectsSection.querySelector('[data-empty-project]');
@@ -12,6 +19,26 @@
   const metricsToggle = metricsProject.querySelector('[data-project-toggle]');
   const architectureProject = document.getElementById('architecture-project');
   let createdProjects = 0;
+
+  function setSidebarCollapsed(collapsed) {
+    hideTooltip();
+    // Preserve the separate project/chat disclosures while hiding their controls.
+    const disappearingContent = collapsed ? sidebarLists : compactLists;
+    if (disappearingContent.contains(document.activeElement) || (collapsed && brand.contains(document.activeElement))) {
+      sidebarToggle.focus({ preventScroll: true });
+      hideTooltip();
+    }
+    app.classList.toggle('is-sidebar-collapsed', collapsed);
+    sidebarToggle.setAttribute('aria-expanded', String(!collapsed));
+    const label = collapsed ? 'Развернуть панель' : 'Свернуть панель';
+    sidebarToggle.setAttribute('aria-label', label);
+    sidebarToggle.dataset.tooltip = label;
+    sidebarLists.inert = collapsed;
+    sidebarLists.setAttribute('aria-hidden', String(collapsed));
+    brand.inert = collapsed;
+    compactLists.inert = !collapsed;
+    compactLists.setAttribute('aria-hidden', String(!collapsed));
+  }
 
   function setExpanded(control, expanded) {
     const content = document.getElementById(control.getAttribute('aria-controls'));
@@ -40,6 +67,7 @@
     }
 
     createdProjects += 1;
+    compactProjects.hidden = false;
     setExpanded(projectsToggle, true);
     if (createdProjects === 1) metricsToggle.focus({ preventScroll: true });
   }
@@ -91,6 +119,12 @@
     control.addEventListener('focus', () => showTooltip(control));
     control.addEventListener('blur', hideTooltip);
   });
+
+  sidebarToggle.addEventListener('click', () => {
+    setSidebarCollapsed(!app.classList.contains('is-sidebar-collapsed'));
+  });
+  narrowScreen.addEventListener('change', (event) => setSidebarCollapsed(event.matches));
+  setSidebarCollapsed(narrowScreen.matches);
 
   document.addEventListener('click', (event) => {
     const link = event.target.closest('a[href="#"]');

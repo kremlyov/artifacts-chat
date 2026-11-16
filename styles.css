@@ -23,22 +23,31 @@ body { background: var(--surface); }
 ul { list-style: none; padding: 0; }
 img { flex: none; display: block; }
 a { color: inherit; text-decoration: none; cursor: pointer; }
-a:focus-visible { outline: 2px solid #7a55ff; outline-offset: 2px; }
+button { cursor: pointer; }
+a:focus-visible, .icon-button:focus-visible { outline: 2px solid #7a55ff; outline-offset: 2px; }
 [hidden] { display: none !important; }
 .app {
+  --sidebar-width: 260px;
+  --sidebar-duration: 320ms;
+  --sidebar-easing: cubic-bezier(.22, 1, .36, 1);
+  position: relative;
   height: 100vh;
   height: 100dvh;
   display: grid;
-  grid-template-columns: 260px minmax(0, 1fr);
+  grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+  transition: grid-template-columns var(--sidebar-duration) var(--sidebar-easing);
   overflow: hidden;
   border-radius: 28px;
 }
 
 .sidebar {
+  min-width: 0;
   min-height: 0;
   padding: 14px 10px 10px;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  transition: padding-bottom var(--sidebar-duration) var(--sidebar-easing);
 }
 
 .sidebar-header, .brand, .header-tools, .account, .profile, .section-head,
@@ -53,7 +62,13 @@ a:focus-visible { outline: 2px solid #7a55ff; outline-offset: 2px; }
   padding: 0 0 0 4px;
   margin-bottom: 10px;
 }
-.brand { gap: 6px; height: 40px; color: #000; }
+.brand {
+  flex: none;
+  gap: 6px;
+  height: 40px;
+  color: #000;
+  transition: opacity 140ms ease, transform var(--sidebar-duration) var(--sidebar-easing), visibility 0s;
+}
 .brand-mark {
   flex: none;
   display: flex;
@@ -65,8 +80,16 @@ a:focus-visible { outline: 2px solid #7a55ff; outline-offset: 2px; }
 }
 .brand-mark img { width: 100%; height: auto; aspect-ratio: 1293 / 1216; object-fit: cover; }
 .brand strong { font: 900 26px/28px var(--text-font); letter-spacing: 0; }
-.header-tools { gap: 4px; }
+.header-tools { display: contents; }
 .header-tools .icon-button { width: 40px; height: 40px; }
+.search-button, .sidebar-toggle {
+  position: absolute;
+  top: 14px;
+  z-index: 2;
+  transition: left var(--sidebar-duration) var(--sidebar-easing), opacity 160ms ease;
+}
+.search-button { left: calc(var(--sidebar-width) - 94px); }
+.sidebar-toggle { left: calc(var(--sidebar-width) - 50px); }
 .composer-tools { gap: 8px; }
 .icon-button {
   width: 36px;
@@ -95,6 +118,30 @@ a:focus-visible { outline: 2px solid #7a55ff; outline-offset: 2px; }
   padding: 0 0 0 14px;
   border-radius: inherit;
 }
+.navigation .row-link { transition: padding-left var(--sidebar-duration) var(--sidebar-easing); }
+.navigation .row-link > span {
+  white-space: nowrap;
+  transition: opacity 140ms ease, visibility 0s;
+}
+.sidebar-lists {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  width: 240px;
+  min-height: 0;
+  transition: opacity 140ms ease, transform var(--sidebar-duration) var(--sidebar-easing), visibility 0s;
+}
+.compact-lists {
+  position: absolute;
+  top: 236px;
+  left: 10px;
+  width: 40px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition: opacity 140ms ease, transform var(--sidebar-duration) var(--sidebar-easing), visibility 0s 140ms;
+}
+.compact-lists .icon-button { width: 40px; height: 40px; }
 .menu-row[aria-current="page"] { background: var(--hover); }
 .nav-item, .folder-row { height: 40px; }
 .project-add-icon {
@@ -177,11 +224,21 @@ a:focus-visible { outline: 2px solid #7a55ff; outline-offset: 2px; }
   pointer-events: none;
 }
 
-.account { flex: none; margin-top: auto; padding-top: 12px; }
+.account {
+  position: relative;
+  flex: none;
+  height: 60px;
+  margin-top: auto;
+  transition: height var(--sidebar-duration) var(--sidebar-easing);
+}
 .profile, .usage { border-radius: 40px; padding: 6px; }
 .profile {
-  position: relative;
-  flex: 1;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: calc(100% - 48px);
+  height: 48px;
+  overflow: hidden;
   gap: 8px;
   border: 0;
   background: transparent;
@@ -190,10 +247,19 @@ a:focus-visible { outline: 2px solid #7a55ff; outline-offset: 2px; }
   letter-spacing: inherit;
   text-align: left;
   cursor: pointer;
+  transition: left var(--sidebar-duration) var(--sidebar-easing), width var(--sidebar-duration) var(--sidebar-easing);
 }
 .profile:focus { outline: none; }
 .profile:focus-visible { background: var(--hover); }
-.usage { flex: none; }
+.usage {
+  position: absolute;
+  bottom: 0;
+  left: calc(100% - 48px);
+  width: 48px;
+  height: 48px;
+  transition: left var(--sidebar-duration) var(--sidebar-easing), bottom var(--sidebar-duration) var(--sidebar-easing);
+}
+.username { transition: opacity 140ms ease, visibility 0s; }
 .avatar { border-radius: 50%; }
 .profile-arrow {
   position: absolute;
@@ -211,7 +277,7 @@ a:focus-visible { outline: 2px solid #7a55ff; outline-offset: 2px; }
 .profile:focus-visible .profile-arrow { visibility: visible; }
 .item-row:focus-within .row-link { padding-right: 36px; }
 @media (hover: hover) {
-  .header-tools .icon-button:hover, .menu-row:hover,
+  .header-tools .icon-button:hover, .compact-lists .icon-button:hover, .menu-row:hover,
   .profile:hover, .usage:hover, .row-action:hover { background-color: var(--hover); }
   .item-row:hover { --row-color: #e6e6e6; }
   .item-row:hover .row-link { padding-right: 36px; }
@@ -220,6 +286,32 @@ a:focus-visible { outline: 2px solid #7a55ff; outline-offset: 2px; }
   .recent:hover > .section-head .row-action,
   .profile:hover .profile-arrow { visibility: visible; }
 }
+
+.app.is-sidebar-collapsed { --sidebar-width: 60px; }
+.is-sidebar-collapsed .sidebar { padding-bottom: 6px; }
+.is-sidebar-collapsed .brand,
+.is-sidebar-collapsed .navigation .row-link > span,
+.is-sidebar-collapsed .sidebar-lists,
+.is-sidebar-collapsed .username {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 140ms ease, transform var(--sidebar-duration) var(--sidebar-easing), visibility 0s 140ms;
+}
+.is-sidebar-collapsed .brand, .is-sidebar-collapsed .sidebar-lists { transform: translateX(-8px); }
+.is-sidebar-collapsed .search-button { left: 10px; }
+.is-sidebar-collapsed .sidebar-toggle { left: calc(var(--sidebar-width) + 14px); opacity: .5; }
+.is-sidebar-collapsed .navigation { margin-bottom: 12px; }
+.is-sidebar-collapsed .navigation .row-link { padding-left: 10px; }
+.is-sidebar-collapsed .compact-lists {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition-delay: 100ms, 0s, 0s;
+}
+.is-sidebar-collapsed .account { height: 108px; }
+.is-sidebar-collapsed .profile { left: -4px; width: 48px; }
+.is-sidebar-collapsed .usage { left: -4px; bottom: 48px; }
+.is-sidebar-collapsed .profile .profile-arrow { visibility: hidden; }
 
 .workspace {
   min-width: 0;
@@ -332,18 +424,10 @@ h1 {
   h1 { font-size: clamp(30px, 4.2vw, 44px); }
 }
 @media (max-width: 800px) {
-  .app { grid-template-columns: 64px minmax(0, 1fr); }
-  .sidebar { padding-inline: 6px; }
-  .sidebar-header { justify-content: center; padding: 0; }
-  .brand strong, .header-tools, .nav-item span, .projects, .recent,
-  .username, .profile-arrow { display: none; }
-  .nav-item .row-link { justify-content: center; padding: 0; }
-  .account { margin-top: auto; flex-direction: column; gap: 4px; }
   .workspace { padding-inline: 24px; }
 }
 @media (max-width: 550px) {
-  .app { grid-template-columns: 50px minmax(0, 1fr); border-radius: 0; }
-  .sidebar { padding-inline: 4px; }
+  .app { border-radius: 0; }
   .workspace { padding: max(32px, calc(40dvh - 178px)) 14px 16px; border-radius: 24px 0 0 24px; }
   h1 { font-size: clamp(21px, 5.2vw, 29px); }
   .suggestion { display: block; font-size: 13px; line-height: 18px; }
@@ -354,7 +438,7 @@ h1 {
   .destinations > a { height: 72px; border-radius: 20px; font-size: 18px; }
 }
 @media (max-height: 500px) and (min-width: 801px) {
-  .sidebar { overflow: auto; }
+  .app:not(.is-sidebar-collapsed) .sidebar { overflow: auto; }
   .recent { min-height: 90px; }
 }
 @media (max-width: 365px) {
@@ -379,5 +463,9 @@ h1 {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .section-toggle img { transition: none; }
+  .app, .sidebar, .brand, .header-tools .icon-button,
+  .navigation .row-link, .navigation .row-link > span, .sidebar-lists,
+  .compact-lists, .account, .profile, .usage, .username, .section-toggle img {
+    transition: none !important;
+  }
 }
