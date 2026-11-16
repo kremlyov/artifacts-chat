@@ -45,10 +45,14 @@
   function setExpanded(control, expanded) {
     const content = document.getElementById(control.getAttribute('aria-controls'));
     control.setAttribute('aria-expanded', String(expanded));
-    content.hidden = !expanded;
 
     if (control.matches('.section-toggle')) {
+      if (!expanded && content.contains(document.activeElement)) control.focus({ preventScroll: true });
+      content.inert = !expanded;
+      content.setAttribute('aria-hidden', String(!expanded));
       control.closest('[data-collapsible]').classList.toggle('is-collapsed', !expanded);
+    } else {
+      content.hidden = !expanded;
     }
     if (control.matches('[data-project-toggle]')) {
       control.querySelector('[data-folder-open]').hidden = !expanded;
@@ -121,7 +125,7 @@
   document.querySelectorAll('[data-tooltip]').forEach((control) => {
     control.addEventListener('pointerenter', () => {
       hideTooltip();
-      tooltipTimer = setTimeout(() => showTooltip(control), 300);
+      tooltipTimer = setTimeout(() => showTooltip(control), 200);
     });
     control.addEventListener('pointerleave', () => {
       clearTimeout(tooltipTimer);
