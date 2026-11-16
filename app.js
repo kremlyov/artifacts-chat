@@ -12,6 +12,7 @@
   const compactProjects = document.querySelector('.compact-projects');
   const brand = document.querySelector('.brand');
   const narrowScreen = window.matchMedia('(max-width: 800px)');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const projectsSection = document.querySelector('.projects');
   const projectsToggle = projectsSection.querySelector('.section-toggle');
   const emptyProjectRow = projectsSection.querySelector('[data-empty-project]');
@@ -133,6 +134,26 @@
     });
     control.addEventListener('focus', () => showTooltip(control));
     control.addEventListener('blur', hideTooltip);
+  });
+
+  document.querySelectorAll('.navigation .row-link').forEach((control) => {
+    const icon = control.querySelector('.nav-icon');
+    const playIcon = () => {
+      if (!reducedMotion.matches) control.classList.add('is-icon-animating');
+    };
+    control.addEventListener('pointerenter', playIcon);
+    control.addEventListener('focus', () => {
+      if (control.matches(':focus-visible')) playIcon();
+    });
+    // Let the short gesture finish after pointerleave; returning mid-gesture won't restart it.
+    control.addEventListener('animationend', (event) => {
+      if (event.target === icon) control.classList.remove('is-icon-animating');
+    });
+  });
+  reducedMotion.addEventListener('change', () => {
+    if (reducedMotion.matches) {
+      document.querySelectorAll('.is-icon-animating').forEach((control) => control.classList.remove('is-icon-animating'));
+    }
   });
 
   sidebarToggle.addEventListener('click', () => {
