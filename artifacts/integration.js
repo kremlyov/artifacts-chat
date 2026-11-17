@@ -7,6 +7,10 @@
   const origin = window.location.origin;
   const body = document.body;
   let visible = false;
+  // The menu changes the iframe width; keep the white panel's target width fixed.
+  const syncShellWidth = () => body.style.setProperty('--integrated-shell-width', `${Math.max(0, window.parent.innerWidth - 60)}px`);
+  syncShellWidth();
+  window.addEventListener('resize', syncShellWidth);
   const announce = () => window.parent.postMessage({
     type: 'artifacts:state',
     state: body.dataset.flowState,

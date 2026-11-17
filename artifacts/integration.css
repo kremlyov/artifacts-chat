@@ -8,7 +8,7 @@
   initial-value: 0;
 }
 .ai-integrated.home-screen .app {
-  --home-width: clamp(360px, 41.038961vw, 632px);
+  --home-width: clamp(360px, calc(var(--integrated-shell-width, 100vw) * .41038961), 632px);
   --flow-gap: 28px;
   height: 100dvh;
   padding: 0;
