@@ -3,10 +3,10 @@
 .agents-hero .headline-line { flex-wrap: nowrap; column-gap: .33em; }
 .agents-hero .headline-line > :first-child { margin-right: 0; }
 .hero-copy, .agents-hero .suggestions { opacity: 1; transition: opacity 320ms ease; }
-.agents-slot { position: relative; display: inline-block; flex: none; width: 2.614em; height: 1.273em; translate: 0 calc(-.136em + 2px); }
+.agents-slot { position: relative; z-index: 1; display: inline-block; flex: none; width: 2.614em; height: 1.273em; translate: 0 calc(-.136em + 2px); }
 .agents-trigger { position: relative; display: block; width: 100%; height: 100%; padding: 0; border: 0; border-radius: 999px; background: none; font: inherit; overflow: visible; -webkit-tap-highlight-color: transparent; }
 .agents-trigger:focus-visible { outline: 2px solid #7a55ff; outline-offset: 5px; }
-.agents-surface { position: absolute; display: block; left: 50%; top: 50%; width: 100%; height: 100%; translate: -50% -50%; transition: width 720ms cubic-bezier(.22,1,.36,1), height 720ms cubic-bezier(.22,1,.36,1), margin 720ms cubic-bezier(.22,1,.36,1), filter 600ms ease; }
+.agents-surface { position: absolute; display: block; left: 50%; top: 50%; width: 100%; height: 100%; margin-top: 4px; translate: -50% -50%; transition: width 720ms cubic-bezier(.22,1,.36,1), height 720ms cubic-bezier(.22,1,.36,1), margin 720ms cubic-bezier(.22,1,.36,1), filter 600ms ease; }
 .agents-tilt { display: block; width: 100%; height: 100%; transform: perspective(800px) rotateX(var(--agents-rotate-x,0deg)) rotateY(var(--agents-rotate-y,0deg)); transform-origin: center; transition: transform 180ms ease-out; }
 .agents-frame { position: relative; display: block; width: 100%; height: 100%; overflow: hidden; border-radius: 999px; background: #d4d7d4; }
 .agents-media { position: absolute; display: block; top: -1.786%; left: -7.826%; width: 120%; height: auto; max-width: none; pointer-events: none; aspect-ratio: 16/9; object-fit: cover; }
@@ -24,7 +24,7 @@
 .agent-bubble:last-child { left: 173px; top: 10px; }
 .is-agents-open .agent-bubble { opacity: 1; translate: 0 0; visibility: visible; }
 .is-agents-open .agent-bubble:first-child { transition-delay: 2800ms,2800ms,0s; }
-.is-agents-open .agent-bubble:last-child { transition-delay: 3150ms,3150ms,0s; }
+.is-agents-open .agent-bubble:last-child { transition-delay: 3500ms,3500ms,0s; }
 .is-agents-open .suggestion { pointer-events: none; }
 .is-artifacts-open .agents-surface { pointer-events: none; }
 @media (max-width: 550px) {

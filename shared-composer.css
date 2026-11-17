@@ -65,6 +65,7 @@
 .model-picker .model img { width: 16px; height: 16px; }
 .chat-model-picker { position: absolute; left: 48px; top: calc(100% - 46px); opacity: 1; visibility: visible; transition: opacity 180ms ease 400ms, visibility 0s; }
 .chat-model-picker .model { width: 142px; height: 36px; }
+.chat-model-picker .model img { width: 12px; height: 12px; flex: none; }
 .artifact-model-label { font-size: 12px; white-space: nowrap; }
 .shared-model-menu { position: absolute; bottom: calc(100% + 8px); right: 0; min-width: 180px; padding: 6px; border-radius: 18px; background: #fff; box-shadow: 0 8px 32px #0002; }
 .shared-model-menu button { display: block; width: 100%; padding: 10px 12px; border: 0; border-radius: 12px; background: none; text-align: left; font-size: 14px; white-space: nowrap; }
