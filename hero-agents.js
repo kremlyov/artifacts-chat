@@ -13,11 +13,11 @@
   let open = false;
   let idleTimer;
   let leaveTimer;
+  let engageTimer;
   let tiltFrame;
-  let reverseFrame;
   let mediaEpoch = 0;
   const visible = () => !document.hidden && !app.classList.contains('is-artifacts-open');
-  const resetTilt = () => { tilt.style.setProperty('--agents-rotate-x', '0deg'); tilt.style.setProperty('--agents-rotate-y', '0deg'); };
+  const resetTilt = () => { cancelAnimationFrame(tiltFrame); tilt.style.setProperty('--agents-rotate-x', '0deg'); tilt.style.setProperty('--agents-rotate-y', '0deg'); };
   function scheduleIdle() {
     clearTimeout(idleTimer);
     if (open || reduced.matches || !visible() || !idle.getAttribute('src')) return;
@@ -35,19 +35,19 @@
     showFrame(idle, 'has-idle-frame', epoch);
     idle.play().catch(scheduleIdle);
   }
-  function reverseEngage() {
-    cancelAnimationFrame(reverseFrame);
-    engage.pause();
-    if (reduced.matches || !Number.isFinite(engage.duration) || engage.currentTime <= 0) return;
-    let previous;
-    const step = (now) => {
-      if (open || !visible()) return;
-      if (previous !== undefined && !engage.seeking) engage.currentTime = Math.max(0, engage.currentTime - Math.min((now - previous) / 1000, .06) * 1.5);
-      previous = now;
-      if (engage.currentTime > 0) reverseFrame = requestAnimationFrame(step);
-      else hero.classList.remove('has-engage-frame');
-    };
-    reverseFrame = requestAnimationFrame(step);
+  function scheduleEngage() {
+    if (reduced.matches || !engage.getAttribute('src')) return;
+    const epoch = mediaEpoch;
+    // Let the 720 ms capsule reveal settle before the people start moving.
+    engageTimer = setTimeout(() => {
+      if (epoch !== mediaEpoch || !open || !visible() || reduced.matches) return;
+      engage.currentTime = 0;
+      engage.playbackRate = .85;
+      showFrame(engage, 'has-engage-frame', epoch);
+      engage.play().catch(() => {
+        if (epoch === mediaEpoch) hero.classList.remove('has-engage-frame');
+      });
+    }, 800);
   }
   function setOpen(active) {
     if (active && !visible()) return;
@@ -56,8 +56,9 @@
     open = active;
     ++mediaEpoch;
     clearTimeout(idleTimer);
+    clearTimeout(engageTimer);
     idle.pause();
-    cancelAnimationFrame(reverseFrame);
+    engage.pause();
     if (active) {
       const rect = trigger.getBoundingClientRect();
       const bounds = document.querySelector('.workspace').getBoundingClientRect();
@@ -69,14 +70,11 @@
     hero.classList.toggle('is-agents-open', active);
     trigger.setAttribute('aria-expanded', String(active));
     dialogues.setAttribute('aria-hidden', String(!active));
-    if (active && !reduced.matches && engage.getAttribute('src')) {
-      const epoch = mediaEpoch;
-      if (engage.ended) engage.currentTime = 0;
-      showFrame(engage, 'has-engage-frame', epoch);
-      engage.play().catch(() => {});
-    } else if (!active) {
+    if (active) scheduleEngage();
+    else {
       resetTilt();
-      reverseEngage();
+      // Fade out the held frame; reset only when the next reveal has settled.
+      hero.classList.remove('has-engage-frame');
       scheduleIdle();
     }
   }
@@ -100,9 +98,10 @@
   document.addEventListener('pointerdown', (event) => { if (!trigger.contains(event.target)) setOpen(false); });
   idle.addEventListener('ended', scheduleIdle);
   idle.addEventListener('error', () => clearTimeout(idleTimer));
+  engage.addEventListener('error', () => { clearTimeout(engageTimer); hero.classList.remove('has-engage-frame'); });
   const syncVisibility = () => {
     if (!visible() || reduced.matches) {
-      setOpen(false); clearTimeout(idleTimer); idle.pause(); engage.pause(); cancelAnimationFrame(reverseFrame);
+      setOpen(false); clearTimeout(idleTimer); clearTimeout(engageTimer); idle.pause(); engage.pause();
     } else scheduleIdle();
   };
   new MutationObserver(syncVisibility).observe(app, { attributes: true, attributeFilter: ['class'] });
