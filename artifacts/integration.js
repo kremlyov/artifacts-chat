@@ -6,9 +6,7 @@
   }
   const origin = window.location.origin;
   const body = document.body;
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
   let visible = false;
-  let entranceTimer;
   const announce = () => window.parent.postMessage({
     type: 'artifacts:state',
     state: body.dataset.flowState,
@@ -19,14 +17,8 @@
     const active = Boolean(event.data.active);
     if (active === visible) return;
     visible = active;
-    clearTimeout(entranceTimer);
-    body.classList.remove('ai-entering');
+    // CSS transitions can reverse from their current position on a quick switch.
     body.classList.toggle('ai-entrance-pending', !active);
-    if (active && body.dataset.flowState === 'idle' && !reduced.matches) {
-      body.classList.add('ai-entering');
-      // Includes the gallery's delay and full settling time.
-      entranceTimer = setTimeout(() => body.classList.remove('ai-entering'), 1400);
-    }
     if (!active) {
       window.ArtifactsPrecise?.setEnabled(false);
       document.querySelectorAll('dialog[open]').forEach((dialog) => dialog.close());

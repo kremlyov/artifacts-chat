@@ -1,6 +1,12 @@
 /* AI shell: viewport edges and spacing from Figma 556:13129. */
 /* Keep the shell's moving white surface visible through the gallery gaps. */
-.ai-integrated { background: transparent; }
+.ai-integrated { background: transparent; transition: opacity 220ms ease; }
+.ai-integrated.ai-entrance-pending:not([data-flow-state="idle"]) { opacity: 0; }
+@property --integrated-gallery-progress {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
 .ai-integrated.home-screen .app {
   --home-width: clamp(360px, 41.038961vw, 632px);
   --flow-gap: 28px;
@@ -44,23 +50,27 @@
 }
 .ai-integrated.home-screen:is([data-flow-state="revealing"], [data-flow-state="workspace"]) .flow-transcript { top: 84px; }
 
-/* Enter once per visit; do not override the prototype's generation transitions. */
-.ai-integrated.ai-entrance-pending[data-flow-state="idle"] :is(.home-header, .hero-heading, .composer-options, .flow-composer-dock, .gallery) { opacity: 0; }
-.ai-integrated.ai-entering[data-flow-state="idle"] :is(.home-header, .hero-heading, .composer-options, .flow-composer-dock) {
-  animation: integrated-content-in 440ms cubic-bezier(.25, .1, .25, 1) 220ms both;
+/* Reversible shell motion; the prototype keeps its own generation transitions. */
+.ai-integrated[data-flow-state="idle"] :is(.home-header, .hero-heading, .composer-options, .flow-composer-dock) {
+  opacity: 1;
+  translate: 0 0;
+  transition: opacity 440ms cubic-bezier(.25, .1, .25, 1) 220ms, translate 440ms cubic-bezier(.25, .1, .25, 1) 220ms;
 }
-.ai-integrated.ai-entering[data-flow-state="idle"] .gallery {
-  /* Follow the contracting surface edge on the same 900 ms curve. */
-  animation: integrated-gallery-in 900ms cubic-bezier(.4, 0, .2, 1) both;
+.ai-integrated.ai-entrance-pending[data-flow-state="idle"] :is(.home-header, .hero-heading, .composer-options, .flow-composer-dock) {
+  opacity: 0;
+  translate: 24px 0;
+  transition-delay: 0s;
 }
-@keyframes integrated-content-in {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
+.ai-integrated[data-flow-state="idle"] .gallery {
+  --integrated-gallery-progress: 1;
+  opacity: var(--integrated-gallery-progress);
+  translate: calc((100vw - var(--home-width)) * (1 - var(--integrated-gallery-progress))) 0;
+  /* A single progress value keeps the edge aligned while the iframe resizes. */
+  transition: --integrated-gallery-progress 900ms cubic-bezier(.4, 0, .2, 1);
 }
-@keyframes integrated-gallery-in {
-  from { opacity: 0; transform: translateX(calc(100vw - var(--home-width))); }
-  to { opacity: 1; transform: translateX(0); }
-}
+.ai-integrated.ai-entrance-pending[data-flow-state="idle"] .gallery { --integrated-gallery-progress: 0; }
+/* The expanding shell supplies the white background during the return to Chat. */
+.ai-integrated.ai-entrance-pending[data-flow-state="idle"] .home-panel { background: transparent; }
 @media (min-width: 801px) and (max-width: 1300px) {
   .ai-integrated.home-screen .app { --flow-gap: 20px; }
   .ai-integrated.home-screen .gallery { gap: 20px; }
@@ -73,7 +83,7 @@
 @media (max-width: 800px) {
   .ai-integrated.home-screen .app { height: auto; padding: 0; gap: 12px; }
   /* The gallery is below the form here, so only fade it in. */
-  .ai-integrated.ai-entering[data-flow-state="idle"] .gallery { animation-name: integrated-content-in; }
+  .ai-integrated[data-flow-state="idle"] .gallery { translate: none; }
   .ai-integrated.home-screen .home-panel { height: 100dvh; padding-inline: 24px; }
   .ai-integrated.home-screen[data-flow-state="idle"] .hero { transform: none; }
   .ai-integrated.home-screen[data-flow-state="idle"] .flow-composer-dock { left: 24px; right: 24px; }
@@ -87,5 +97,6 @@
   .ai-integrated.home-screen[data-flow-state="idle"] .flow-composer-dock { left: 20px; right: 20px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .ai-integrated.ai-entering :is(.home-header, .hero-heading, .composer-options, .flow-composer-dock, .gallery) { animation: none !important; }
+  .ai-integrated,
+  .ai-integrated :is(.home-header, .hero-heading, .composer-options, .flow-composer-dock, .gallery) { transition: none !important; }
 }
