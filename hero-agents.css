@@ -1,0 +1,48 @@
+/* Figma 560:13183 → 560:13573. The inline slot never changes the text layout. */
+.agents-hero { position: relative; --agents-expanded-width: 303px; --agents-expanded-height: 147px; }
+.agents-hero .headline-line { flex-wrap: nowrap; column-gap: .33em; }
+.agents-hero .headline-line > :first-child { margin-right: 0; }
+.hero-copy, .agents-hero .suggestions { opacity: 1; transition: opacity 320ms ease; }
+.agents-slot { position: relative; display: inline-block; flex: none; width: 2.614em; height: 1.273em; translate: 0 -.136em; }
+.agents-trigger { position: relative; display: block; width: 100%; height: 100%; padding: 0; border: 0; border-radius: 999px; background: none; font: inherit; overflow: visible; -webkit-tap-highlight-color: transparent; }
+.agents-trigger:focus-visible { outline: 2px solid #7a55ff; outline-offset: 5px; }
+.agents-surface { position: absolute; display: block; left: 50%; top: 50%; width: 100%; height: 100%; translate: -50% -50%; transition: width 720ms cubic-bezier(.22,1,.36,1), height 720ms cubic-bezier(.22,1,.36,1), margin 720ms cubic-bezier(.22,1,.36,1), filter 600ms ease; }
+.agents-tilt { display: block; width: 100%; height: 100%; transform: perspective(800px) rotateX(var(--agents-rotate-x,0deg)) rotateY(var(--agents-rotate-y,0deg)); transform-origin: center; transition: transform 180ms ease-out; }
+.agents-frame { position: relative; display: block; width: 100%; height: 100%; overflow: hidden; border-radius: 999px; background: #d4d7d4; }
+.agents-media { position: absolute; display: block; top: -1.786%; left: -7.826%; width: 120%; height: auto; max-width: none; pointer-events: none; aspect-ratio: 16/9; object-fit: cover; }
+.agents-idle { opacity: 0; }
+.agents-color, .agents-engage { opacity: 0; transition: opacity 600ms ease; }
+.has-idle-frame .agents-idle { opacity: 1; }
+.is-agents-open .hero-copy { opacity: .2; pointer-events: none; }
+.is-agents-open .suggestions { opacity: .5; pointer-events: none; }
+.is-agents-open .agents-surface { width: var(--agents-expanded-width); height: var(--agents-expanded-height); margin-left: var(--agents-shift-x,0px); margin-top: 3.5px; filter: drop-shadow(10px 54px 47px #0004); }
+.is-agents-open .agents-color { opacity: 1; }
+.is-agents-open.has-engage-frame .agents-engage { opacity: 1; }
+.agents-dialogues { position: absolute; display: block; z-index: 2; inset: 0; pointer-events: none; font: 400 14px/18px var(--text-font); letter-spacing: 0; }
+.agent-bubble { position: absolute; display: block; width: max-content; max-width: 270px; padding: 10px 16px; border-radius: 100px; background: #1d1d1d; color: #fff; opacity: 0; translate: 0 8px; visibility: hidden; transition: opacity 220ms ease, translate 380ms cubic-bezier(.22,1,.36,1), visibility 0s 380ms; }
+.agent-bubble:first-child { left: 153px; top: -34px; }
+.agent-bubble:last-child { left: 173px; top: 10px; }
+.is-agents-open .agent-bubble { opacity: 1; translate: 0 0; visibility: visible; }
+.is-agents-open .agent-bubble:first-child { transition-delay: 1100ms,1100ms,0s; }
+.is-agents-open .agent-bubble:last-child { transition-delay: 1450ms,1450ms,0s; }
+.is-agents-open .suggestion { pointer-events: none; }
+.is-artifacts-open .agents-surface { pointer-events: none; }
+@media (max-width: 550px) {
+  .agents-hero { --agents-expanded-width: 280px; --agents-expanded-height: 136px; }
+  .agents-slot { margin-left: .05em; }
+  .agents-dialogues { left: calc(50% + var(--agents-shift-x,0px)); right: auto; width: var(--agents-expanded-width); translate: -50% 0; }
+  .agent-bubble { max-width: 100%; padding: 8px 12px; font-size: 12px; line-height: 16px; }
+  .agent-bubble:first-child { left: auto; right: 0; top: 100px; }
+  .agent-bubble:last-child { left: auto; right: 0; top: 138px; }
+}
+@media (max-width: 365px) {
+  .agents-hero h1 { font-size: 18px; }
+  .agents-hero { --agents-expanded-width: 226px; --agents-expanded-height: 110px; }
+  .agent-bubble:first-child { top: 90px; }
+  .agent-bubble:last-child { top: 128px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .agents-hero *, .agents-surface, .agents-tilt { transition: none !important; }
+  .agents-tilt { transform: none; }
+  .agents-idle, .agents-engage { display: none; }
+}
