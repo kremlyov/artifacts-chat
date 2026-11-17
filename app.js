@@ -28,13 +28,17 @@
   const chatNavigation = document.querySelector('.navigation [data-open-ai]');
   let artifactsOpen = false;
   let sidebarBeforeArtifacts = narrowScreen.matches;
+  let artifactResizeTimer;
 
   function notifyArtifacts() {
     artifactsFrame.contentWindow?.postMessage({ type: 'artifacts:visibility', active: artifactsOpen }, window.location.origin);
+    window.SharedComposer.sync();
   }
 
   function setArtifactsOpen(open) {
     if (artifactsOpen === open) return;
+    clearTimeout(artifactResizeTimer);
+    app.classList.remove('is-artifact-resizing');
     hideTooltip();
     if (open) {
       sidebarBeforeArtifacts = app.classList.contains('is-sidebar-collapsed');
@@ -43,8 +47,8 @@
     }
     artifactsOpen = open;
     app.classList.toggle('is-artifacts-open', open);
-    workspace.inert = open;
-    workspace.setAttribute('aria-hidden', String(open));
+    window.SharedComposer.setMode(open, sidebarBeforeArtifacts);
+    if (!open) app.classList.remove('is-artifacts-dialog-open');
     artifactsPortal.inert = !open;
     artifactsPortal.setAttribute('aria-hidden', String(!open));
     artifactsFrame.tabIndex = open ? 0 : -1;
@@ -69,8 +73,16 @@
     if (event.data?.type === 'artifacts:ready') artifactsReady();
     if (event.data?.type === 'artifacts:state' && typeof event.data.state === 'string') {
       app.dataset.artifactsState = event.data.state;
-      if (/^\d+px$/.test(event.data.chatWidth || '')) app.style.setProperty('--artifact-chat-width', event.data.chatWidth);
+      if (/^\d+px$/.test(event.data.chatWidth || '') && app.style.getPropertyValue('--artifact-chat-width') !== event.data.chatWidth) {
+        if (artifactsOpen && event.data.state === 'workspace') {
+          app.classList.add('is-artifact-resizing');
+          clearTimeout(artifactResizeTimer);
+          artifactResizeTimer = setTimeout(() => app.classList.remove('is-artifact-resizing'), 150);
+        }
+        app.style.setProperty('--artifact-chat-width', event.data.chatWidth);
+      }
     }
+    window.SharedComposer.receive(event.data || {});
   });
 
 
@@ -93,6 +105,7 @@
     brand.inert = collapsed;
     compactLists.inert = !collapsed;
     compactLists.setAttribute('aria-hidden', String(!collapsed));
+    window.SharedComposer.layout();
   }
 
   function setExpanded(control, expanded) {

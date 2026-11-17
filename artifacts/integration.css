@@ -50,17 +50,7 @@
 }
 .ai-integrated.home-screen:is([data-flow-state="revealing"], [data-flow-state="workspace"]) .flow-transcript { top: 84px; }
 
-/* Reversible shell motion; the prototype keeps its own generation transitions. */
-.ai-integrated[data-flow-state="idle"] :is(.home-header, .hero-heading, .composer-options, .flow-composer-dock) {
-  opacity: 1;
-  translate: 0 0;
-  transition: opacity 440ms cubic-bezier(.25, .1, .25, 1) 220ms, translate 440ms cubic-bezier(.25, .1, .25, 1) 220ms;
-}
-.ai-integrated.ai-entrance-pending[data-flow-state="idle"] :is(.home-header, .hero-heading, .composer-options, .flow-composer-dock) {
-  opacity: 0;
-  translate: 24px 0;
-  transition-delay: 0s;
-}
+/* The gallery follows the shared white surface in either direction. */
 .ai-integrated[data-flow-state="idle"] .gallery {
   --integrated-gallery-progress: 1;
   opacity: var(--integrated-gallery-progress);
@@ -100,3 +90,14 @@
   .ai-integrated,
   .ai-integrated :is(.home-header, .hero-heading, .composer-options, .flow-composer-dock, .gallery) { transition: none !important; }
 }
+
+/* The shell owns the single visible composer and the white surface. */
+.ai-integrated.ai-shared-composer .home-panel { background: transparent !important; }
+.ai-shared-composer :is(.hero, .home-header, #composer) { visibility: hidden !important; pointer-events: none !important; }
+.ai-shared-composer.home-screen:is([data-flow-state="conversation"], [data-flow-state="revealing"], [data-flow-state="workspace"]) .flow-composer-dock {
+  transition: top 900ms cubic-bezier(.4, 0, .2, 1), left 900ms cubic-bezier(.4, 0, .2, 1), right 900ms cubic-bezier(.4, 0, .2, 1);
+}
+.ai-shared-composer.home-screen:is([data-flow-state="conversation"], [data-flow-state="revealing"], [data-flow-state="workspace"]) .flow-transcript { bottom: calc(170px + var(--active-chats-height)); }
+.ai-shared-composer :is(.hero *, .home-header *, #composer *) { visibility: hidden !important; pointer-events: none !important; }
+.ai-shared-composer a.version-choice { color: inherit; text-decoration: none; }
+@media (max-width: 800px) { .ai-shared-composer.home-screen .gallery { background: #f2f2f2; } }

@@ -560,7 +560,7 @@ h1 {
   border-radius: 4px 24px 24px 20px;
 }
 .composer {
-  height: 120px;
+  height: 100px;
   margin-top: 58px;
   padding: 16px 8px 8px;
   display: flex;
@@ -690,47 +690,4 @@ h1 {
   .projects, .recent, #projects-list > li, .recent-list {
     transition: none !important;
   }
-}
-
-/* The original white surface contracts before the Artifacts view takes over. */
-.app {
-  --artifacts-home-width: clamp(360px, calc((100vw - 60px) * .41038961), 632px);
-  --artifacts-duration: 900ms;
-  --artifacts-easing: cubic-bezier(.4, 0, .2, 1);
-}
-.workspace {
-  width: 100%;
-  transition: width var(--artifacts-duration) var(--artifacts-easing), border-radius var(--artifacts-duration) var(--artifacts-easing), background-color 0s;
-}
-.workspace > * {
-  translate: 0 0;
-  transition: opacity 220ms ease 480ms, translate 440ms ease 480ms;
-}
-.artifacts-portal {
-  position: absolute;
-  inset: 0 0 0 var(--sidebar-width);
-  min-width: 0;
-  visibility: hidden;
-  pointer-events: none;
-  /* Keep the child visible until its reverse gallery transition is complete. */
-  transition: left var(--sidebar-duration) var(--sidebar-easing), visibility 0s var(--artifacts-duration);
-}
-.artifacts-portal iframe { display: block; width: 100%; height: 100%; border: 0; }
-.is-artifacts-open .workspace {
-  width: var(--artifacts-home-width);
-  border-radius: 36px;
-}
-.is-artifacts-open.is-artifacts-ready .workspace {
-  background-color: transparent;
-  transition-delay: 0s, 0s, var(--artifacts-duration);
-}
-.is-artifacts-open:is([data-artifacts-state="workspace"], [data-artifacts-state="revealing"]) .workspace { width: var(--artifact-chat-width, 320px); }
-.is-artifacts-open .workspace > * { opacity: 0; translate: -24px 0; transition-delay: 0s; }
-.is-artifacts-open.is-artifacts-ready .artifacts-portal { visibility: visible; pointer-events: auto; transition-delay: 0s, 0s; }
-.app.is-artifacts-open .sidebar-toggle { opacity: 0; visibility: hidden; pointer-events: none; }
-@media (max-width: 860px) {
-  .app { --artifacts-home-width: calc(100vw - 60px); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .workspace, .workspace > *, .artifacts-portal { transition: none !important; }
 }
