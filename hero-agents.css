@@ -23,8 +23,8 @@
 .agent-bubble:first-child { left: 153px; top: -34px; }
 .agent-bubble:last-child { left: 173px; top: 10px; }
 .is-agents-open .agent-bubble { opacity: 1; translate: 0 0; visibility: visible; }
-.is-agents-open .agent-bubble:first-child { transition-delay: 2800ms,2800ms,0s; }
-.is-agents-open .agent-bubble:last-child { transition-delay: 3500ms,3500ms,0s; }
+.is-agents-open .agent-bubble:first-child { transition-delay: 1800ms,1800ms,0s; }
+.is-agents-open .agent-bubble:last-child { transition-delay: 3200ms,3200ms,0s; }
 .is-agents-open .suggestion { pointer-events: none; }
 .is-artifacts-open .agents-surface { pointer-events: none; }
 @media (max-width: 550px) {

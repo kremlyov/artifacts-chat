@@ -127,8 +127,8 @@
       content.hidden = !expanded;
     }
     if (control.matches('[data-project-toggle]')) {
-      control.querySelector('[data-folder-open]').hidden = !expanded;
-      control.querySelector('[data-folder-closed]').hidden = expanded;
+      control.querySelector('[data-folder-open]').toggleAttribute('hidden', !expanded);
+      control.querySelector('[data-folder-closed]').toggleAttribute('hidden', expanded);
     }
   }
 
@@ -208,7 +208,6 @@
   });
 
   document.querySelectorAll('[data-animated-icon]').forEach((control) => {
-    const icon = control.querySelector('.nav-icon');
     const playIcon = () => {
       if (!reducedMotion.matches) control.classList.add('is-icon-animating');
     };
@@ -218,7 +217,7 @@
     });
     // Let the short gesture finish after pointerleave; returning mid-gesture won't restart it.
     control.addEventListener('animationend', (event) => {
-      if (event.target === icon) control.classList.remove('is-icon-animating');
+      if (event.target.matches('.nav-icon')) control.classList.remove('is-icon-animating');
     });
   });
   reducedMotion.addEventListener('change', () => {

@@ -196,8 +196,10 @@ a:focus-visible, .icon-button:focus-visible { outline: 2px solid #7a55ff; outlin
 .is-icon-animating .nav-icon--panel { animation-name: nav-panel; }
 .is-icon-animating .panel-divider { animation-name: nav-panel-divider; }
 .is-icon-animating .nav-icon--projects { animation-name: nav-projects; }
+.is-icon-animating .nav-icon--folder { animation-name: nav-projects; }
 .is-icon-animating .project-sheet { animation-name: nav-project-sheet; }
 .is-icon-animating .folder-body { animation-name: nav-folder-body; }
+.is-icon-animating .folder-body--open { animation-name: nav-folder-open-body; }
 .is-icon-animating .nav-icon--chats { animation-name: nav-chats; }
 .arena-clash { opacity: 0; stroke-dasharray: 1; stroke-dashoffset: 1; }
 .is-icon-animating .nav-icon--arena { animation-name: nav-arena; }
@@ -253,6 +255,11 @@ a:focus-visible, .icon-button:focus-visible { outline: 2px solid #7a55ff; outlin
   0%, 100% { transform: scaleY(1); }
   36%, 54% { transform: scaleY(.92); }
   78% { transform: scaleY(1.02); }
+}
+@keyframes nav-folder-open-body {
+  0%, 100% { transform: translateY(0) scaleY(1); }
+  36%, 54% { transform: translateY(-.6px) scaleY(.88); }
+  78% { transform: translateY(.2px) scaleY(1.02); }
 }
 @keyframes nav-chats {
   0%, 100% { transform: translate(0, 0) rotate(0) scale(1); }
