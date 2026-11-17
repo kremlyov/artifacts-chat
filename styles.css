@@ -722,7 +722,7 @@ h1 {
 }
 .is-artifacts-open:is([data-artifacts-state="workspace"], [data-artifacts-state="revealing"]) .workspace { width: var(--artifact-chat-width, 320px); }
 .is-artifacts-open .workspace > * { opacity: 0; transition-delay: 0s; }
-.is-artifacts-open.is-artifacts-ready .artifacts-portal { opacity: 1; visibility: visible; transition-delay: 0s, 140ms, 0s; }
+.is-artifacts-open.is-artifacts-ready .artifacts-portal { opacity: 1; visibility: visible; transition-delay: 0s, 0s, 0s; }
 .app.is-artifacts-open .sidebar-toggle { opacity: 0; visibility: hidden; pointer-events: none; }
 @media (max-width: 860px) {
   .app { --artifacts-home-width: calc(100vw - 60px); }

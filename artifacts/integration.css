@@ -50,14 +50,15 @@
   animation: integrated-content-in 440ms cubic-bezier(.25, .1, .25, 1) 220ms both;
 }
 .ai-integrated.ai-entering[data-flow-state="idle"] .gallery {
-  animation: integrated-gallery-in 860ms cubic-bezier(.25, .1, .25, 1) 360ms both;
+  /* Follow the contracting surface edge on the same 900 ms curve. */
+  animation: integrated-gallery-in 900ms cubic-bezier(.4, 0, .2, 1) both;
 }
 @keyframes integrated-content-in {
   from { opacity: 0; transform: translateY(4px); }
   to { opacity: 1; transform: translateY(0); }
 }
 @keyframes integrated-gallery-in {
-  from { opacity: 0; transform: translateX(-24px); }
+  from { opacity: 0; transform: translateX(calc(100vw - var(--home-width))); }
   to { opacity: 1; transform: translateX(0); }
 }
 @media (min-width: 801px) and (max-width: 1300px) {
@@ -71,6 +72,8 @@
 }
 @media (max-width: 800px) {
   .ai-integrated.home-screen .app { height: auto; padding: 0; gap: 12px; }
+  /* The gallery is below the form here, so only fade it in. */
+  .ai-integrated.ai-entering[data-flow-state="idle"] .gallery { animation-name: integrated-content-in; }
   .ai-integrated.home-screen .home-panel { height: 100dvh; padding-inline: 24px; }
   .ai-integrated.home-screen[data-flow-state="idle"] .hero { transform: none; }
   .ai-integrated.home-screen[data-flow-state="idle"] .flow-composer-dock { left: 24px; right: 24px; }
