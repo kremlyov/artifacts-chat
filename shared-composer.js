@@ -80,7 +80,7 @@
   });
   form.addEventListener('submit', (event) => {
     event.preventDefault();
-    if (mode && !sourceReadOnly && prompt.value.trim()) post('submit', { value: prompt.value });
+    if (mode && !sourceReadOnly) post('submit', { value: prompt.value });
   });
   modelToggle.addEventListener('click', () => {
     modelMenu.hidden = !modelMenu.hidden;
