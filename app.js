@@ -29,6 +29,7 @@
   let artifactsOpen = false;
   let sidebarBeforeArtifacts = narrowScreen.matches;
   let artifactResizeTimer;
+  let artifactTransitionTimer;
 
   function notifyArtifacts() {
     artifactsFrame.contentWindow?.postMessage({ type: 'artifacts:visibility', active: artifactsOpen }, window.location.origin);
@@ -40,14 +41,20 @@
     clearTimeout(artifactResizeTimer);
     app.classList.remove('is-artifact-resizing');
     hideTooltip();
+    clearTimeout(artifactTransitionTimer);
+    app.classList.add('is-artifacts-transitioning');
     if (open) {
       sidebarBeforeArtifacts = app.classList.contains('is-sidebar-collapsed');
-      setSidebarCollapsed(true);
       if (workspace.contains(document.activeElement)) artifactsNavigation.focus({ preventScroll: true });
     }
     artifactsOpen = open;
     app.classList.toggle('is-artifacts-open', open);
     window.SharedComposer.setMode(open, sidebarBeforeArtifacts);
+    setSidebarCollapsed(open || narrowScreen.matches || sidebarBeforeArtifacts);
+    artifactTransitionTimer = setTimeout(() => {
+      app.classList.remove('is-artifacts-transitioning');
+      window.SharedComposer.layout();
+    }, reducedMotion.matches ? 0 : 950);
     if (!open) app.classList.remove('is-artifacts-dialog-open');
     artifactsPortal.inert = !open;
     artifactsPortal.setAttribute('aria-hidden', String(!open));
@@ -56,7 +63,6 @@
     sidebarToggle.setAttribute('aria-hidden', String(open));
     document.querySelectorAll('.navigation .nav-item').forEach((item) => item.removeAttribute('aria-current'));
     (open ? artifactsNavigation : chatNavigation).closest('.nav-item').setAttribute('aria-current', 'page');
-    if (!open) setSidebarCollapsed(narrowScreen.matches || sidebarBeforeArtifacts);
     hideTooltip();
     notifyArtifacts();
   }
@@ -222,10 +228,16 @@
   });
 
   sidebarToggle.addEventListener('click', () => {
+    clearTimeout(artifactTransitionTimer);
+    app.classList.remove('is-artifacts-transitioning');
     setSidebarCollapsed(!app.classList.contains('is-sidebar-collapsed'));
   });
   narrowScreen.addEventListener('change', (event) => {
-    if (!artifactsOpen) setSidebarCollapsed(event.matches);
+    if (!artifactsOpen) {
+      clearTimeout(artifactTransitionTimer);
+      app.classList.remove('is-artifacts-transitioning');
+      setSidebarCollapsed(event.matches);
+    }
   });
   setSidebarCollapsed(narrowScreen.matches);
 

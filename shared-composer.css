@@ -5,16 +5,21 @@
   --artifacts-duration: 900ms;
   --artifacts-easing: cubic-bezier(.4, 0, .2, 1);
   --active-chat-height: 90px;
-  --shared-mode-progress: 0;
-  transition: grid-template-columns var(--sidebar-duration) var(--sidebar-easing), --shared-mode-progress var(--artifacts-duration) var(--artifacts-easing);
+  transition: grid-template-columns var(--sidebar-duration) var(--sidebar-easing);
 }
+/* All moving edges use the same curve during a mode switch. */
+.app:is(.is-artifacts-open, .is-artifacts-transitioning) {
+  --sidebar-duration: var(--artifacts-duration);
+  --sidebar-easing: var(--artifacts-easing);
+}
+.sidebar { z-index: 2; background: var(--surface); }
 /* This background and composer belong to both modes. Neither is replaced. */
 .workspace {
   --composer-side: 32px;
   position: relative;
-  width: 100%;
+  width: var(--chat-workspace-width, 100%);
   overflow: hidden;
-  transition: width var(--artifacts-duration) var(--artifacts-easing), border-radius var(--artifacts-duration) var(--artifacts-easing);
+  transition: width var(--sidebar-duration) var(--sidebar-easing), border-radius var(--artifacts-duration) var(--artifacts-easing);
 }
 .chat-intro { position: relative; z-index: 2; opacity: 1; translate: 0 0; transition: opacity 220ms ease 400ms, translate 440ms ease 400ms; }
 .shared-composer {
@@ -22,12 +27,12 @@
   z-index: 3;
   top: var(--composer-top, calc(50dvh - 10px));
   left: 50%;
-  width: min(680px, calc(100% - 2 * var(--composer-side)));
+  width: var(--chat-composer-width, min(680px, calc(100% - 2 * var(--composer-side))));
   translate: -50% 0;
   pointer-events: none;
-  transition: width var(--artifacts-duration) var(--artifacts-easing);
+  transition: width var(--sidebar-duration) var(--sidebar-easing);
 }
-.is-composer-ready .shared-composer { transition: top var(--artifacts-duration) var(--artifacts-easing), width var(--artifacts-duration) var(--artifacts-easing); }
+.is-composer-ready .shared-composer { transition: top var(--artifacts-duration) var(--artifacts-easing), width var(--sidebar-duration) var(--sidebar-easing); }
 .shared-composer .composer { position: relative; height: auto; min-height: 100px; margin: 0; padding: 0; gap: 0; pointer-events: auto; }
 .shared-composer .prompt {
   display: block;
@@ -55,52 +60,47 @@
 .shared-composer .icon-button:disabled { opacity: .4; cursor: default; }
 .inline-model-space { width: 146px; transition: width var(--artifacts-duration) var(--artifacts-easing); }
 #shared-inline-settings { opacity: 1; visibility: visible; transition: opacity 180ms ease 400ms, visibility 0s; }
-.model-picker {
-  position: absolute;
-  z-index: 5;
-  left: 48px;
-  top: calc(100% - 46px);
-  translate: 0 0;
-  transition: left var(--artifacts-duration) var(--artifacts-easing), top var(--artifacts-duration) var(--artifacts-easing), translate var(--artifacts-duration) var(--artifacts-easing);
-}
-.model-picker .model { display: flex; width: 142px; justify-content: center; padding: 0 10px; transition: width var(--artifacts-duration) var(--artifacts-easing), height var(--artifacts-duration) var(--artifacts-easing), font-size var(--artifacts-duration) var(--artifacts-easing); }
-.model-labels { display: grid; min-width: 0; }
-.model-labels > span { grid-area: 1/1; transition: opacity 220ms ease; }
-.artifact-model-label { opacity: 0; font-size: 12px; }
+.model-picker { position: relative; z-index: 5; flex: none; }
+.model-picker .model { display: flex; width: 140px; height: 32px; justify-content: center; padding: 0 10px; }
 .model-picker .model img { width: 16px; height: 16px; }
+.chat-model-picker { position: absolute; left: 48px; top: calc(100% - 46px); opacity: 1; visibility: visible; transition: opacity 180ms ease 400ms, visibility 0s; }
+.chat-model-picker .model { width: 142px; height: 36px; }
+.artifact-model-label { font-size: 12px; white-space: nowrap; }
 .shared-model-menu { position: absolute; bottom: calc(100% + 8px); right: 0; min-width: 180px; padding: 6px; border-radius: 18px; background: #fff; box-shadow: 0 8px 32px #0002; }
 .shared-model-menu button { display: block; width: 100%; padding: 10px 12px; border: 0; border-radius: 12px; background: none; text-align: left; font-size: 14px; white-space: nowrap; }
 .shared-model-menu button:hover, .shared-model-menu button:focus-visible { background: var(--surface); }
 .artifact-heading { position: absolute; bottom: calc(100% + 108px); width: 100%; color: #111; text-align: center; font-family: 'Artifacts YS', Arial, sans-serif; opacity: 0; translate: 24px 0; visibility: hidden; transition: opacity 220ms ease, translate 440ms ease, visibility 0s 440ms; }
 .artifact-heading h2 { margin: 0; font-size: 40px; line-height: 47px; font-weight: 700; letter-spacing: 0; }
 .artifact-heading p { margin: 12px 0 0; font-size: 20px; line-height: 23px; }
-.artifact-providers { position: absolute; left: calc(50% - 173px); top: -40px; display: flex; height: 32px; padding: 3px; border-radius: 999px; background: var(--surface); pointer-events: none; opacity: 0; translate: 0 8px; visibility: hidden; transition: opacity 220ms ease, translate 440ms ease, visibility 0s 440ms; }
-.artifact-providers button { border: 0; border-radius: 999px; background: none; padding: 0 10px; font-size: 12px; line-height: 18px; color: #888; }
+.artifact-controls { position: absolute; top: -40px; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; height: 32px; pointer-events: none; opacity: 0; translate: 0 8px; visibility: hidden; transition: opacity 220ms ease, translate 440ms ease, visibility 0s 440ms, gap var(--artifacts-duration) var(--artifacts-easing); }
+.artifact-providers { display: flex; flex: none; width: 198px; height: 32px; padding: 3px; border-radius: 999px; background: var(--surface); transition: width var(--artifacts-duration) var(--artifacts-easing), opacity 220ms ease, padding var(--artifacts-duration) var(--artifacts-easing), visibility 0s; }
+.artifact-providers button { border: 0; border-radius: 999px; background: none; padding: 0 10px; font-size: 12px; line-height: 18px; color: #888; white-space: nowrap; }
 .artifact-providers button[aria-pressed="true"] { background: #fff; color: #111; box-shadow: 0 2px 8px #0001; }
 .artifact-topbar { position: absolute; z-index: 3; top: 12px; left: 20px; right: 12px; display: flex; align-items: center; gap: 8px; height: 44px; opacity: 0; visibility: hidden; translate: 24px 0; transition: opacity 220ms ease, translate 440ms ease, visibility 0s 440ms; }
 .artifact-brand { margin-right: auto; border: 0; padding: 0; background: none; color: #000; font: 700 26px/32px 'Artifacts YS', Arial, sans-serif; letter-spacing: -.6px; white-space: nowrap; }
 .artifact-topbar .icon-button { width: 44px; height: 44px; flex: none; padding: 12px; border: 0; background: #00000004; }
 .artifact-back { display: none; }
 .destinations { position: relative; z-index: 2; opacity: 1; translate: 0 0; transition: opacity 220ms ease 400ms, translate 440ms ease 400ms, visibility 0s; }
-.artifacts-portal { position: absolute; z-index: 1; inset: 0 0 0 var(--sidebar-width); min-width: 0; visibility: hidden; pointer-events: none; transition: left var(--sidebar-duration) var(--sidebar-easing), visibility 0s var(--artifacts-duration); }
+/* A fixed iframe viewport keeps gallery cards at their final size on entry and exit. */
+.artifacts-portal { position: absolute; z-index: 1; inset: 0 0 0 60px; min-width: 0; visibility: hidden; pointer-events: none; transition: visibility 0s var(--artifacts-duration); }
 .artifacts-portal iframe { display: block; width: 100%; height: 100%; border: 0; }
 .is-artifacts-open .workspace { --composer-side: 36px; width: var(--artifacts-home-width); border-radius: 36px; }
 .is-artifacts-open :is(.chat-intro, .destinations) { opacity: 0; translate: -24px 0; pointer-events: none; transition-delay: 0s; }
 .is-artifacts-open .destinations { visibility: hidden; transition-delay: 0s, 0s, 440ms; }
 .is-artifacts-open :is(.artifact-heading, .artifact-topbar) { opacity: 1; translate: 0 0; visibility: visible; transition-delay: 220ms, 220ms, 0s; }
-.is-artifacts-open .artifact-providers { opacity: 1; translate: 0 0; visibility: visible; pointer-events: auto; transition-delay: 360ms, 360ms, 0s; }
-.is-artifacts-open .model-picker { left: calc(50% + 33px); top: -40px; }
-.is-artifacts-open .model-picker .model { width: 140px; height: 32px; }
-.is-artifacts-open .chat-model-label { opacity: 0; }
-.is-artifacts-open .artifact-model-label { opacity: 1; }
+.is-artifacts-open .artifact-controls { opacity: 1; translate: 0 0; visibility: visible; pointer-events: auto; transition-delay: 360ms, 360ms, 0s, 0s; }
+.is-artifacts-open .chat-model-picker { opacity: 0; visibility: hidden; pointer-events: none; transition-delay: 0s, 180ms; }
+.is-artifacts-open .shared-composer { width: calc(var(--artifacts-home-width) - 2 * var(--composer-side)); }
 .is-artifacts-open .inline-model-space { width: 0; }
 .is-artifacts-open #shared-inline-settings { opacity: 0; visibility: hidden; transition-delay: 0s, 180ms; }
-.is-artifacts-open.is-artifacts-ready .artifacts-portal { visibility: visible; pointer-events: auto; transition-delay: 0s, 0s; }
+.is-artifacts-open.is-artifacts-ready .artifacts-portal { visibility: visible; pointer-events: auto; transition-delay: 0s; }
 .app.is-artifacts-open .sidebar-toggle { opacity: 0; visibility: hidden; pointer-events: none; }
 .is-artifacts-open:not([data-artifacts-state="idle"]) .shared-composer { top: calc(100dvh - 118px - var(--active-chat-height)); }
 .is-artifacts-open:is([data-artifacts-state="workspace"], [data-artifacts-state="revealing"]) .workspace { --composer-side: 12px; width: var(--artifact-chat-width, 320px); }
-.is-artifacts-open:not([data-artifacts-state="idle"]) :is(.artifact-heading, .artifact-providers) { opacity: 0; visibility: hidden; pointer-events: none; transition-delay: 0s, 0s, 440ms; }
-.is-artifacts-open:not([data-artifacts-state="idle"]) .model-picker { left: 50%; translate: -50% 0; }
+.is-artifacts-open:not([data-artifacts-state="idle"]) .artifact-heading { opacity: 0; visibility: hidden; pointer-events: none; transition-delay: 0s, 0s, 440ms; }
+.is-artifacts-open:not([data-artifacts-state="idle"]) .artifact-controls { gap: 0; }
+.is-artifacts-open:not([data-artifacts-state="idle"]) .artifact-providers { width: 0; padding-inline: 0; overflow: hidden; opacity: 0; visibility: hidden; transition-delay: 0s, 0s, 0s, 440ms; }
+.is-artifacts-open:is([data-artifacts-state="workspace"], [data-artifacts-state="revealing"]) .shared-composer { width: calc(var(--artifact-chat-width, 320px) - 24px); }
 .is-artifacts-open:not([data-artifacts-state="idle"]) .artifact-back { display: grid; }
 .is-artifacts-open:not([data-artifacts-state="idle"]) .artifact-brand { flex: 1; text-align: center; font-size: 24px; }
 .is-artifacts-dialog-open :is(.shared-composer, .artifact-topbar) { visibility: hidden; pointer-events: none; }
@@ -123,34 +123,24 @@
   .artifact-heading p { font-size: 17px; line-height: 22px; }
   .artifact-heading { bottom: calc(100% + 96px); }
   .is-artifacts-open .workspace { --composer-side: 20px; }
-  .artifact-providers { left: 0; }
+  .artifact-controls { justify-content: space-between; gap: 0; }
+  .artifact-providers { width: 157px; }
   .artifact-providers button { padding: 0 6px; font-size: 11px; }
-  .is-artifacts-open .model-picker { left: auto; right: 0; }
-  .is-artifacts-open .model-picker .model { width: 124px; padding: 0 6px; }
-  .is-artifacts-open:not([data-artifacts-state="idle"]) .model-picker { left: 50%; right: auto; }
-  .model-picker { left: 44px; }
-  .model-picker .model { width: 120px; font-size: 12px; padding: 0 6px; }
+  .artifact-controls .model { width: 124px; padding: 0 6px; }
+  .is-artifacts-open:not([data-artifacts-state="idle"]) .artifact-controls { justify-content: center; }
+  .chat-model-picker { left: 44px; }
+  .chat-model-picker .model { width: 120px; font-size: 12px; padding: 0 6px; }
   .inline-model-space { width: 120px; }
   .shared-composer .composer-tools { gap: 2px; }
   .artifact-topbar { left: 12px; }
   .artifact-brand { font-size: 24px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .workspace, .shared-composer, .chat-intro, .destinations, .artifact-heading, .artifact-topbar, .artifact-providers, .artifacts-portal,
+  .workspace, .shared-composer, .chat-intro, .destinations, .artifact-heading, .artifact-topbar, .artifact-controls, .artifact-providers, .artifacts-portal,
   .shared-composer * { transition: none !important; }
 }
 
-/* Fade the moving model control while it crosses the textarea's text line. */
-@property --shared-mode-progress { syntax: '<number>'; inherits: true; initial-value: 0; }
-.app.is-artifacts-open { --shared-mode-progress: 1; }
-.model-picker .model { opacity: clamp(0, max(calc(1 - var(--shared-mode-progress) * 4), calc((var(--shared-mode-progress) - .6) * 2.5)), 1); }
-.model-labels > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .is-artifacts-dialog-open :is(.shared-composer, .shared-composer *, .artifact-topbar, .artifact-topbar *) { visibility: hidden !important; pointer-events: none !important; }
-@media (max-width: 550px) {
-  .artifact-providers { left: 0; }
-  .is-artifacts-open .model-picker { left: auto; right: 0; }
-  .is-artifacts-open:not([data-artifacts-state="idle"]) .model-picker { left: 50%; right: auto; }
-}
 @media (prefers-reduced-motion: reduce) {
   .app { transition: none !important; }
 }

@@ -10,9 +10,11 @@
   const form = document.getElementById('shared-composer-form');
   const prompt = document.getElementById('shared-prompt');
   const send = document.getElementById('shared-send');
-  const picker = document.getElementById('shared-model-picker');
-  const modelToggle = document.getElementById('shared-model-toggle');
-  const modelMenu = document.getElementById('shared-model-menu');
+  const controls = document.querySelector('.artifact-controls');
+  const chatPicker = document.getElementById('shared-chat-model-picker');
+  const pickers = [...document.querySelectorAll('.model-picker')].map((element) => ({
+    element, toggle: element.querySelector('.model'), menu: element.querySelector('.shared-model-menu')
+  }));
   const frame = document.querySelector('.artifacts-portal iframe');
   const fileInput = document.getElementById('shared-file-input');
   const attachments = document.getElementById('shared-attachments');
@@ -24,22 +26,29 @@
   app.dataset.artifactsState ||= 'idle';
   const post = (action, extra = {}) => frame.contentWindow?.postMessage({ type: 'artifacts:composer', action, ...extra }, window.location.origin);
   const closeModels = () => {
-    modelMenu.hidden = true;
-    modelToggle.setAttribute('aria-expanded', 'false');
+    for (const { toggle, menu } of pickers) {
+      menu.hidden = true;
+      toggle.setAttribute('aria-expanded', 'false');
+    }
   };
   function layout() {
-    const collapsed = mode ? previousSidebarCollapsed : app.classList.contains('is-sidebar-collapsed');
+    const collapsed = mode || app.classList.contains('is-artifacts-transitioning') ? previousSidebarCollapsed : app.classList.contains('is-sidebar-collapsed');
     const side = collapsed ? 60 : 260;
     const style = getComputedStyle(workspace);
     const width = Math.max(0, Math.min(680, window.innerWidth - side - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight)));
+    // Animate fixed endpoints; percentages would grow with the collapsing sidebar.
+    app.style.setProperty('--chat-workspace-width', `${Math.max(0, window.innerWidth - side)}px`);
+    app.style.setProperty('--chat-composer-width', `${width}px`);
     intro.style.width = `${width}px`;
     const gap = window.matchMedia('(max-width: 550px)').matches ? 32 : 58;
     workspace.style.setProperty('--composer-top', `${parseFloat(style.paddingTop) + intro.getBoundingClientRect().height + gap}px`);
   }
   function updateMode() {
     const idle = app.dataset.artifactsState === 'idle';
-    document.querySelector('.chat-model-label').setAttribute('aria-hidden', String(mode));
-    document.querySelector('.artifact-model-label').setAttribute('aria-hidden', String(!mode));
+    chatPicker.inert = mode;
+    chatPicker.setAttribute('aria-hidden', String(mode));
+    controls.inert = !mode;
+    controls.setAttribute('aria-hidden', String(!mode));
     intro.inert = mode;
     intro.setAttribute('aria-hidden', String(mode));
     destinations.inert = mode;
@@ -54,9 +63,6 @@
     document.getElementById('shared-inline-settings').inert = mode;
     send.disabled = mode && sourceReadOnly;
     prompt.setAttribute('aria-label', mode ? 'Опишите идею приложения' : 'Сообщение');
-    for (const option of modelMenu.querySelectorAll('[data-shared-model]')) {
-      option.hidden = mode === (option.dataset.sharedModel === 'Alice AI LLM');
-    }
   }
   function renderAttachments() {
     attachments.hidden = !files.length;
@@ -82,30 +88,33 @@
     event.preventDefault();
     if (mode && !sourceReadOnly) post('submit', { value: prompt.value });
   });
-  modelToggle.addEventListener('click', () => {
-    modelMenu.hidden = !modelMenu.hidden;
-    modelToggle.setAttribute('aria-expanded', String(!modelMenu.hidden));
-    if (!modelMenu.hidden) modelMenu.querySelector('button:not([hidden])')?.focus();
-  });
-  modelMenu.addEventListener('click', (event) => {
-    const option = event.target.closest('[data-shared-model]');
-    if (!option) return;
-    if (mode) post('model', { value: option.dataset.sharedModel });
-    closeModels(); modelToggle.focus();
-  });
+  for (const { element, toggle, menu } of pickers) {
+    toggle.addEventListener('click', () => {
+      const open = menu.hidden;
+      closeModels();
+      menu.hidden = !open;
+      toggle.setAttribute('aria-expanded', String(open));
+      if (open) menu.querySelector('button')?.focus();
+    });
+    menu.addEventListener('click', (event) => {
+      const option = event.target.closest('[data-shared-model]');
+      if (!option) return;
+      if (mode) post('model', { value: option.dataset.sharedModel });
+      closeModels(); toggle.focus();
+    });
+    element.addEventListener('keydown', (event) => {
+      if (event.key !== 'ArrowDown' || menu.hidden) return;
+      event.preventDefault();
+      const options = [...menu.querySelectorAll('button')];
+      options[(options.indexOf(document.activeElement) + 1) % options.length]?.focus();
+    });
+  }
   providers.addEventListener('click', (event) => {
     const button = event.target.closest('[data-shared-provider]');
     if (button) post('provider', { value: button.dataset.sharedProvider });
   });
-  document.addEventListener('click', (event) => { if (!picker.contains(event.target)) closeModels(); });
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') closeModels();
-    if (event.key === 'ArrowDown' && !modelMenu.hidden && picker.contains(event.target)) {
-      event.preventDefault();
-      const options = [...modelMenu.querySelectorAll('button:not([hidden])')];
-      options[(options.indexOf(document.activeElement) + 1) % options.length]?.focus();
-    }
-  });
+  document.addEventListener('click', (event) => { if (!pickers.some(({ element }) => element.contains(event.target))) closeModels(); });
+  document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeModels(); });
   document.querySelector('.artifact-back').addEventListener('click', () => post('home'));
   document.querySelector('.artifact-brand').addEventListener('click', () => post('home'));
   document.querySelector('.artifact-settings').addEventListener('click', () => post('settings'));
