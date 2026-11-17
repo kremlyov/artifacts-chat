@@ -89,8 +89,8 @@
       const rect = surface.getBoundingClientRect();
       const x = Math.max(-1, Math.min(1, (event.clientX - rect.left) / rect.width * 2 - 1));
       const y = Math.max(-1, Math.min(1, (event.clientY - rect.top) / rect.height * 2 - 1));
-      tilt.style.setProperty('--agents-rotate-x', `${-y * 7}deg`);
-      tilt.style.setProperty('--agents-rotate-y', `${x * 9}deg`);
+      tilt.style.setProperty('--agents-rotate-x', `${-y * 9}deg`);
+      tilt.style.setProperty('--agents-rotate-y', `${x * 12}deg`);
     });
   });
   trigger.addEventListener('focus', () => { if (trigger.matches(':focus-visible')) setOpen(true); });

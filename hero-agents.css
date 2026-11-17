@@ -3,7 +3,7 @@
 .agents-hero .headline-line { flex-wrap: nowrap; column-gap: .33em; }
 .agents-hero .headline-line > :first-child { margin-right: 0; }
 .hero-copy, .agents-hero .suggestions { opacity: 1; transition: opacity 320ms ease; }
-.agents-slot { position: relative; display: inline-block; flex: none; width: 2.614em; height: 1.273em; translate: 0 -.136em; }
+.agents-slot { position: relative; display: inline-block; flex: none; width: 2.614em; height: 1.273em; translate: 0 calc(-.136em + 2px); }
 .agents-trigger { position: relative; display: block; width: 100%; height: 100%; padding: 0; border: 0; border-radius: 999px; background: none; font: inherit; overflow: visible; -webkit-tap-highlight-color: transparent; }
 .agents-trigger:focus-visible { outline: 2px solid #7a55ff; outline-offset: 5px; }
 .agents-surface { position: absolute; display: block; left: 50%; top: 50%; width: 100%; height: 100%; translate: -50% -50%; transition: width 720ms cubic-bezier(.22,1,.36,1), height 720ms cubic-bezier(.22,1,.36,1), margin 720ms cubic-bezier(.22,1,.36,1), filter 600ms ease; }
