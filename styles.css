@@ -386,6 +386,8 @@ a:focus-visible, .icon-button:focus-visible { outline: 2px solid #7a55ff; outlin
   height: 32px;
   visibility: hidden;
 }
+.section-actions { position: absolute; right: 4px; top: 50%; translate: 0 -50%; display: flex; gap: 4px; }
+.section-actions .row-action { position: static; transform: none; flex: none; }
 .item-row { height: 36px; min-width: 0; }
 .item-row.folder-row, .item-row.nested { height: 40px; }
 .item-row.nested .row-link { padding-left: 42px; }
